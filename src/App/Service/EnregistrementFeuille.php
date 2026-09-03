@@ -107,8 +107,15 @@ final class EnregistrementFeuille
                 'alertes' => $alertes, 'alertes_vues' => 0, 'enregistree_le' => date('Y-m-d H:i:s'), 'enregistree_par' => (int) $utilisateur['id']]);
             $this->app->service(JournalRepository::class)->ecrire((int) $utilisateur['id'], $correction ? 'feuille_corrigee' : 'feuille_enregistree', 'rencontre', $rencontreId,
                 ['total' => $calcul->totalPour . '-' . $calcul->totalContre, 'alertes' => $alertes]);
+            if ($lu['date_reelle'] !== $r['date_reelle']) {
+                $this->app->service(JournalRepository::class)->ecrire((int) $utilisateur['id'], 'report', 'rencontre', $rencontreId, ['de' => $r['date_reelle'], 'a' => $lu['date_reelle']]);
+            }
         });
-        $this->app->service(Notifications::class)->feuilleEnregistree($this->app->service(RencontreRepository::class)->parId($rencontreId), $correction, $utilisateur);
+        $rencontreMiseAJour = $this->app->service(RencontreRepository::class)->parId($rencontreId);
+        if ($lu['date_reelle'] !== $r['date_reelle']) {
+            $this->app->service(Notifications::class)->report($rencontreMiseAJour, $r['date_reelle'], $utilisateur);
+        }
+        $this->app->service(Notifications::class)->feuilleEnregistree($rencontreMiseAJour, $correction, $utilisateur);
         return ['erreurs' => [], 'alertes' => $alertes];
     }
 

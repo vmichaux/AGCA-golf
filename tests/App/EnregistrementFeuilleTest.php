@@ -7,6 +7,7 @@ use Agca\App\Repository\DivisionRepository;
 use Agca\App\Repository\EquipeRepository;
 use Agca\App\Repository\GolfRepository;
 use Agca\App\Repository\JoueurRepository;
+use Agca\App\Repository\JournalRepository;
 use Agca\App\Repository\JourneeRepository;
 use Agca\App\Repository\PartieRepository;
 use Agca\App\Repository\RencontreRepository;
@@ -128,6 +129,18 @@ final class EnregistrementFeuilleTest extends DbTestCase
         self::assertSame([], $svc->enregistrer($this->rencontre, $post, $admin)['erreurs']);
         self::assertSame(14, (int) $this->app->service(RencontreRepository::class)->parId($this->rencontre)['total_pour']);
         self::assertStringContainsString('corrigée', $this->app->service(Mailer::class)->dernierEnvoi()['sujet']);
+    }
+
+    public function testEnregistrementAvecDateDifferenteJournaliseEtNotifieLeReport(): void
+    {
+        $svc = $this->app->service(EnregistrementFeuille::class);
+        $post = $this->post();
+        $post['date_reelle'] = '2026-10-31';
+        $r = $svc->enregistrer($this->rencontre, $post, $this->capitaine);
+        self::assertSame(['erreurs' => [], 'alertes' => []], $r);
+        $journal = $this->app->service(JournalRepository::class)->parCible('rencontre', $this->rencontre);
+        $actions = array_column($journal, 'action');
+        self::assertContains('report', $actions);
     }
 
     public function testChangerDate(): void
