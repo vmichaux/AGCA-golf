@@ -1,9 +1,9 @@
 @import url("/fonts/fonts.css");
-:root{--vert-profond:#1f3d2e;--vert:#2f6a4f;--vert-clair:#e6efe9;--beige:#f4efe6;--ocre:#c9a24d;--encre:#1a1a1a;--gris:#5b5f5c;--bord:#d9d3c4;--blanc:#fff;--serif:"Fraunces",Georgia,"Times New Roman",serif;--sans:"Inter",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+:root{--vert-profond:#1f3d2e;--vert:#2f6a4f;--vert-clair:#e6efe9;--beige:#f4efe6;--ocre:#c9a24d;--encre:#1a1a1a;--gris:#5b5f5c;--bord:#d9d3c4;--blanc:#fff;--titre:"Manrope","Inter",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;--sans:"Inter",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
 body{margin:0;font-family:var(--sans);font-size:16px;line-height:1.55;color:var(--encre);background:var(--blanc)}
 a{color:var(--vert)}img{max-width:100%;display:block}
-h1,h2,h3,.serif{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;line-height:1.15;margin:0}
+h1,h2,h3,.titre{font-family:var(--titre);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin:0}
 .etiquette{display:block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ocre);font-weight:600;margin-bottom:.6rem}
 .conteneur{max-width:1180px;margin:0 auto;padding:0 1.25rem}
 .bouton{display:inline-block;padding:.7rem 1.2rem;border-radius:4px;background:var(--vert);color:#fff;text-decoration:none;font-weight:600;font-size:.95rem;border:1px solid var(--vert)}
@@ -15,7 +15,7 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;l
 .entete .conteneur{display:flex;align-items:center;gap:1.5rem;min-height:66px}
 .marque{display:flex;align-items:center;gap:.7rem;color:#fff;text-decoration:none}
 .marque img{width:40px;height:40px;border-radius:50%;background:#fff}
-.marque strong{font-family:var(--serif);font-size:1.35rem;font-weight:600;letter-spacing:.04em}
+.marque strong{font-family:var(--titre);font-size:1.3rem;font-weight:800;letter-spacing:.06em}
 .marque span{display:block;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;opacity:.8}
 .nav{margin-left:auto;display:flex;gap:1.35rem;align-items:center}
 .nav a{color:#fff;text-decoration:none;font-size:.92rem;opacity:.92}.nav a:hover{opacity:1;text-decoration:underline;text-underline-offset:5px}
@@ -28,22 +28,22 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;l
 .bandeau{position:relative;color:#fff;min-height:560px;display:flex;align-items:center;background:var(--vert-profond) url(/img/hero-golf.jpg) center/cover no-repeat}
 .bandeau::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(20,40,30,.86) 0%,rgba(20,40,30,.55) 55%,rgba(20,40,30,.35) 100%)}
 .bandeau .conteneur{position:relative;padding-top:4rem;padding-bottom:3rem}
-.bandeau h1{font-size:clamp(2.2rem,5vw,3.8rem);font-weight:400;max-width:12ch}
+.bandeau h1{font-size:clamp(2.1rem,4.6vw,3.6rem);font-weight:800;max-width:14ch;letter-spacing:-.03em}
 .bandeau p{max-width:56ch;font-size:1.08rem;opacity:.95;margin:1.2rem 0 1.6rem}
 .bandeau .etiquette{color:var(--ocre)}
 .chiffres{display:flex;flex-wrap:wrap;gap:2.5rem;margin-top:2.6rem;padding-top:1.6rem;border-top:1px solid rgba(255,255,255,.25)}
-.chiffres b{display:block;font-family:var(--serif);font-size:2.2rem;font-weight:400;color:var(--ocre);line-height:1}
+.chiffres b{display:block;font-family:var(--titre);font-size:2.3rem;font-weight:800;color:var(--ocre);line-height:1;letter-spacing:-.03em}
 .chiffres span{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;opacity:.85}
 /* prochaine journée */
 .prochaine{background:var(--beige);border-bottom:1px solid var(--bord)}
 .prochaine .conteneur{display:flex;flex-wrap:wrap;gap:.6rem 2rem;align-items:center;padding:.9rem 1.25rem;font-size:.95rem}
 .prochaine .etiquette{margin:0}
-.prochaine strong{font-family:var(--serif);font-size:1.2rem;font-weight:600}
+.prochaine strong{font-family:var(--titre);font-size:1.15rem;font-weight:800}
 .prochaine .lien-fleche{margin-left:auto}
 /* sections */
 section.bloc{padding:3.5rem 0}section.bloc.beige{background:var(--beige)}
 .titre-section{display:flex;align-items:end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem}
-.titre-section h2{font-size:2rem;font-weight:400}
+.titre-section h2{font-size:1.9rem;font-weight:800}
 .deux-colonnes{display:grid;grid-template-columns:1.1fr .9fr;gap:2.5rem}
 .carte{background:#fff;border:1px solid var(--bord);border-radius:6px;overflow:hidden}
 .carte-tete{display:flex;justify-content:space-between;align-items:center;padding:.7rem 1rem;background:var(--vert-clair);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--vert-profond)}
@@ -53,10 +53,10 @@ th,td{padding:.6rem 1rem;text-align:left;border-bottom:1px solid var(--bord)}
 th{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gris);font-weight:600}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 tr:last-child td{border-bottom:0}
-td.rang{font-family:var(--serif);color:var(--ocre);font-size:1.1rem;width:3rem}
+td.rang{font-family:var(--titre);color:var(--ocre);font-size:1rem;font-weight:800;width:3rem}
 .liste-rencontres{list-style:none;margin:0;padding:0}
 .liste-rencontres li{display:grid;grid-template-columns:5.5rem 1fr;gap:1rem;padding:.8rem 0;border-bottom:1px solid var(--bord)}
-.liste-rencontres .date{font-family:var(--serif);color:var(--ocre);font-size:1.05rem;line-height:1.1}
+.liste-rencontres .date{font-family:var(--titre);color:var(--ocre);font-size:1rem;font-weight:800;line-height:1.1}
 .liste-rencontres .date small{display:block;font-family:var(--sans);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gris)}
 .liste-rencontres .div{font-size:.8rem;color:var(--gris)}
 .grille-5{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem}
@@ -72,19 +72,19 @@ td.rang{font-family:var(--serif);color:var(--ocre);font-size:1.1rem;width:3rem}
 .actu p{margin:0;color:var(--gris);font-size:.95rem}
 .grille-golfs{display:grid;grid-template-columns:repeat(6,1fr);gap:.8rem}
 .golf{background:#fff;border:1px solid var(--bord);border-radius:6px;padding:.9rem 1rem}
-.golf b{display:block;font-family:var(--serif);font-weight:600;font-size:1.05rem}
+.golf b{display:block;font-family:var(--titre);font-weight:600;font-size:1.05rem}
 .golf span{font-size:.82rem;color:var(--gris)}
 .presentation{max-width:70ch;font-size:1.05rem}
-.presentation h2{font-size:2rem;font-weight:400;margin-bottom:1rem}
+.presentation h2{font-size:1.9rem;font-weight:800;margin-bottom:1rem}
 /* pied */
 .pied{background:var(--vert-profond);color:#fff;padding:3rem 0 2rem;font-size:.9rem}
 .pied .conteneur{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:2rem}
-.pied h4{font-family:var(--serif);font-weight:600;font-size:1.2rem;margin:0 0 .6rem}
+.pied h4{font-family:var(--titre);font-weight:600;font-size:1.2rem;margin:0 0 .6rem}
 .pied a{color:#fff}.pied p{margin:.2rem 0;opacity:.9}
 .pied .bas{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.2);padding-top:1rem;font-size:.78rem;opacity:.7;display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between}
 /* pages intérieures */
 .entete-page{background:var(--beige);border-bottom:1px solid var(--bord);padding:2.4rem 0 1.6rem}
-.entete-page h1{font-size:2.4rem;font-weight:400}
+.entete-page h1{font-size:2.3rem;font-weight:800}
 .sous-nav{display:flex;flex-wrap:wrap;gap:1.4rem;margin-top:1.2rem;font-size:.92rem}
 .sous-nav a{text-decoration:none;font-weight:600;color:var(--vert-profond);padding-bottom:.3rem;border-bottom:2px solid transparent}
 .sous-nav a.actif{border-color:var(--ocre)}
@@ -99,3 +99,19 @@ td.rang{font-family:var(--serif);color:var(--ocre);font-size:1.1rem;width:3rem}
 .tableau-defilant{overflow-x:auto}
 @media (max-width:1024px){.grille-5{grid-template-columns:repeat(3,1fr)}.grille-golfs{grid-template-columns:repeat(3,1fr)}.deux-colonnes{grid-template-columns:1fr}.pied .conteneur{grid-template-columns:1fr 1fr}}
 @media (max-width:640px){.nav{display:none}.burger{display:block}.bandeau{min-height:0;background-image:url(/img/hero-golf-960.jpg)}.bandeau .conteneur{padding-top:3rem}.chiffres{gap:1.4rem 2rem}.grille-5,.grille-3,.grille-golfs{grid-template-columns:1fr 1fr}.grille-golfs{grid-template-columns:1fr 1fr}.pied .conteneur{grid-template-columns:1fr}.titre-section{flex-direction:column;align-items:start}th,td{padding:.5rem .6rem}.prochaine .lien-fleche{margin-left:0}}
+
+/* citation et storytelling */
+.citation{background:var(--vert);color:#fff}
+.citation .conteneur{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1.5rem;padding:1rem 1.25rem;font-family:var(--titre);font-weight:500;font-size:1.1rem}
+.citation a{color:var(--ocre);font-weight:700;text-decoration:none;margin-left:auto;white-space:nowrap}
+.citation a:hover{text-decoration:underline;text-underline-offset:4px}
+.story{display:grid;grid-template-columns:1.25fr .75fr;gap:2.5rem;align-items:start}
+.story h2{font-size:2rem;font-weight:800;margin-bottom:1.2rem}
+.story h3{font-size:1.05rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--vert-profond);margin:1.4rem 0 .4rem}
+.story p{margin:0 0 .8rem;font-size:1.02rem}
+.story .serie{padding-left:1rem;border-left:3px solid var(--ocre)}
+.encart{background:var(--vert-profond);color:#fff;border-radius:8px;padding:2rem 1.8rem;position:sticky;top:90px}
+.encart h3{font-size:1.6rem;font-weight:800;margin:0 0 1rem;letter-spacing:-.02em;color:#fff;text-transform:none}
+.encart p{margin:0 0 1rem;opacity:.95;font-size:1.02rem;line-height:1.6}
+.encart .filet{width:48px;height:3px;background:var(--ocre);margin-bottom:1.2rem}
+@media (max-width:1024px){.story{grid-template-columns:1fr}.encart{position:static}}

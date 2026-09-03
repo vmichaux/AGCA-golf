@@ -17,7 +17,7 @@ Date : 4 septembre 2026. Statut : à valider par Victoria (pour Robert Michaux).
 
 ### Identité
 - Couleurs : vert profond `#1f3d2e` (en-tête, bandeau, pied), vert `#2f6a4f` (liens, boutons), beige `#f4efe6` (sections alternées), ocre `#c9a24d` (chiffres clés, filets), encre `#1a1a1a`, blanc.
-- Typographie : titres en serif « Fraunces » (400 et 600), texte en « Inter » (400 et 600), auto-hébergées dans `public/fonts/` (aucun appel à Google Fonts en production, conformité RGPD), avec repli Georgia / système.
+- Typographie : titres en sans-serif moderne « Manrope » (700 et 800, chiffres clés en 800), texte en « Inter » (400 et 600), auto-hébergées dans `public/fonts/` (aucun appel à Google Fonts en production, conformité RGPD), avec repli système. Rendu haut de gamme et sobre : graisses fortes, interlettrage serré sur les titres, étiquettes en petites capitales ocre.
 - Logo : `public/img/logo-agca.jpg` (150 × 150 actuel), affiché à 40 px dans l'en-tête à côté du mot « AGCA » et de « Association des Golfs de la Coupe de l'Amitié » en petites capitales.
 - Photo : `public/img/hero-golf.jpg` (1920 × 1280, 350 Ko) + variante 960 px pour mobile. La génération d'image n'étant pas disponible, photo libre du parcours de Cannes-Mougins (Wikimedia Commons, licence CC BY-SA 4.0, crédit yourgolftravel.com) ; crédit affiché dans les mentions légales. Remplaçable par une photo de l'association depuis le dossier `public/img/`.
 
@@ -29,14 +29,15 @@ Date : 4 septembre 2026. Statut : à valider par Victoria (pour Robert Michaux).
 
 ### Accueil
 Sections, de haut en bas :
-1. Bandeau photo avec « Interclub Provence-Alpes-Côte d'Azur », le titre « Association des Golfs de la Coupe de l'Amitié » et le texte de présentation actuel (« Notre association regroupe 18 clubs et 25 équipes… »), boutons « Classements » et « Espace capitaine ».
-2. Chiffres clés calculés : golfs membres (golfs actifs), équipes engagées (équipes de la saison active), journées de championnat (dates distinctes du calendrier de la saison active), compétitions individuelles (5).
-3. Bandeau « Prochaine journée » : première date à venir du calendrier de la saison active, avec la série et le nombre de rencontres, lien vers le suivi.
-4. Classements en cours : pour chaque série, la première division (5 premières lignes : rang, équipe, joués, points) et un lien « Toutes les divisions ».
-5. Prochaines rencontres : les 6 prochaines rencontres à jouer, toutes séries, avec date, recevant, invité, division.
-6. Nos compétitions : cinq cartes (nom, accroche, formule, dernier vainqueur du palmarès) reprenant le texte de l'ancien site (« exclusivement réservées aux joueurs des clubs membres ayant participé au moins une fois… »).
-7. Actualités : les trois dernières publiées (date, titre, résumé), lien vers la liste.
-8. Golfs membres : grille des golfs actifs (nom, ville), lien vers la page.
+1. Bandeau photo avec « Interclubs · Provence-Alpes-Côte d'Azur », le titre « Association des Golfs de la Coupe de l'Amitié », une phrase d'accroche, boutons « Classements et calendrier » et « Espace capitaine », puis les chiffres clés calculés : golfs membres (golfs actifs), équipes engagées (équipes de la saison active), journées de championnat (dates distinctes du calendrier de la saison active), compétitions individuelles (5).
+2. Bandeau citation « Le sport relie les gens, construit des amitiés et avant tout, vous permet de vous faire plaisir. » avec lien vers https://www.ffgolf.org/.
+3. Storytelling (textes de l'ancien site, éditables dans la page `accueil-presentation`) : « Inter-clubs par équipe », « Amitié 2e série mixte », « Amitié Homme 1re série », « Autres compétitions », et l'encart vert « Les Coupes de l'Amitié » avec le texte de présentation de l'association.
+4. Bandeau « Prochaine journée » : première date à venir du calendrier de la saison active, avec la série et le nombre de rencontres, lien vers le suivi.
+5. Classements en cours : pour chaque série, la première division (5 premières lignes : rang, équipe, joués, points) et un lien « Toutes les divisions ».
+6. Prochaines rencontres : les 6 prochaines rencontres à jouer, toutes séries, avec date, recevant, invité, division.
+7. Nos compétitions : cinq cartes (nom, accroche, formule, dernier vainqueur du palmarès) reprenant le texte de l'ancien site (« exclusivement réservées aux joueurs des clubs membres ayant participé au moins une fois… »).
+8. Actualités : les trois dernières publiées (date, titre, résumé), lien vers la liste.
+9. Golfs membres : grille des golfs actifs (nom, ville), lien vers la page.
 
 ### Pages publiques
 | Route | Contenu |
