@@ -74,7 +74,7 @@ final class AdminController extends Controller
         $serieId = (int) $req->post('serie_id', 0) ?: null;
         if ($identifiant === '') { $this->flash('erreur', 'Identifiant vide.'); return $this->rediriger('/admin/utilisateurs'); }
         $repo = $this->app->service(UtilisateurRepository::class);
-        if ($repo->parIdentifiantEtSerie($identifiant, $serieId) !== null && $serieId !== null) { $this->flash('erreur', 'Cet identifiant existe déjà pour cette série.'); return $this->rediriger('/admin/utilisateurs'); }
+        if ($repo->parIdentifiantEtSerie($identifiant, $serieId) !== null) { $this->flash('erreur', 'Cet identifiant existe déjà.'); return $this->rediriger('/admin/utilisateurs'); }
         $mdp = MotDePasse::generer();
         $id = $repo->creer(['identifiant' => $identifiant, 'serie_id' => $serieId, 'equipe_id' => (int) $req->post('equipe_id', 0) ?: null, 'hash_bcrypt' => MotDePasse::hacher($mdp)]);
         $this->app->service(JournalRepository::class)->ecrire((int) $u['id'], 'utilisateur_cree', 'utilisateur', $id);

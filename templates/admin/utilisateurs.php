@@ -13,7 +13,7 @@
       </td>
       <td><form method="post" action="/admin/utilisateurs/<?= e($u['id']) ?>/admin" class="inline"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><input type="hidden" name="valeur" value="<?= $u['est_admin'] ? 0 : 1 ?>"><button class="lien" style="color:var(--vert)"><?= $u['est_admin'] ? 'Oui (retirer)' : 'Non (activer)' ?></button></form></td>
       <td><?= e($u['derniere_connexion'] ?? 'jamais') ?><?= $u['hash_sha1'] ? ' <span class="aide">(ancien mot de passe)</span>' : '' ?></td>
-      <td><form method="post" action="/admin/utilisateurs/<?= e($u['id']) ?>/reinitialiser" class="inline" onsubmit="return confirm('Générer un nouveau mot de passe pour <?= e($u['identifiant']) ?> ?')"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><button class="bouton bouton-secondaire">Réinitialiser le mot de passe</button></form></td>
+      <td><form method="post" action="/admin/utilisateurs/<?= e($u['id']) ?>/reinitialiser" class="inline" data-identifiant="<?= e($u['identifiant']) ?>" onsubmit="return confirm('Générer un nouveau mot de passe pour ' + this.dataset.identifiant + ' ?')"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><button class="bouton bouton-secondaire">Réinitialiser le mot de passe</button></form></td>
     </tr>
   <?php endforeach; ?>
   </tbody></table></div>

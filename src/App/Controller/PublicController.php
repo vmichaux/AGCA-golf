@@ -58,7 +58,7 @@ final class PublicController extends Controller
     {
         $serie = $this->serie($code);
         $saisons = $this->app->service(Saisons::class);
-        $saison = $saisons->courante($req->get('saison'));
+        $saison = $saisons->courante(is_string($s = $req->get('saison')) ? $s : null);
         $divisions = $saison === null ? [] : $this->app->service(DivisionRepository::class)->parSaisonEtSerie((int) $saison['id'], (int) $serie['id']);
         return ['serie' => $serie, 'saison' => $saison, 'saisons' => $saisons->toutes(), 'divisions' => $divisions];
     }

@@ -62,7 +62,7 @@ final class FeuilleController extends Controller
         $this->exigerCsrf($req);
         $erreur = $this->app->service(EnregistrementFeuille::class)->changerDate((int) $id, (string) $req->post('date_reelle', ''), $u);
         $this->flash($erreur === null ? 'succes' : 'erreur', $erreur ?? 'Date mise à jour ; le capitaine adverse et l\'administrateur sont prévenus.');
-        return $this->rediriger((string) $req->post('retour', '/rencontre/' . (int) $id));
+        return $this->rediriger('/rencontre/' . (int) $id);
     }
 
     /** Pré-remplit le formulaire depuis les parties existantes (correction admin). */
