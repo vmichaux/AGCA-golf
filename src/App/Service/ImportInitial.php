@@ -18,15 +18,18 @@ final class ImportInitial
     /** @return array{rapport:list<string>, erreurs:list<string>} */
     public function executer(array $d, array $admin): array
     {
-        $rapport = []; $erreurs = [];
         $db = $this->app->db();
         foreach ($this->app->service(SaisonRepository::class)->toutes() as $s) {
             if ($s['libelle'] === $d['saison']['libelle']) { return ['rapport' => [], 'erreurs' => ["La saison {$s['libelle']} existe déjà : import refusé."]]; }
         }
+        // $erreurs ne sert qu'aux pré-vérifications ci-dessous : au-delà, tout échec devient une ImportEchec
+        // qui fait échouer la transaction (voir plus bas).
+        $erreurs = [];
         foreach (['Mequipe', 'H1equipe', 'Midentifiant', 'H1identifiant'] as $t) {
             if ($db->one("SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ?", [$t]) === null) { $erreurs[] = "Ancienne table absente : $t (charger le dump d'abord)."; }
         }
         if ($erreurs !== []) { return ['rapport' => [], 'erreurs' => $erreurs]; }
+        $rapport = [];
 
         $series = $this->app->service(SerieRepository::class);
         $golfs = $this->app->service(GolfRepository::class);
@@ -74,7 +77,7 @@ final class ImportInitial
                 }
 
                 $saison = $creation->creerSaison($d['saison']['libelle'], $d['saison']['date_debut'], $d['saison']['date_fin'], $d['dates'], $admin + ['est_admin' => 1]);
-                if ($saison['erreurs'] !== []) { throw new \RuntimeException(implode(' ', $saison['erreurs'])); }
+                if ($saison['erreurs'] !== []) { throw new ImportEchec(implode(' ', $saison['erreurs'])); }
                 $rapport[] = "Saison {$d['saison']['libelle']} créée.";
                 foreach ($d['divisions'] as $code => $divisions) {
                     $serieId = (int) $series->parCode($code)['id'];
@@ -82,11 +85,11 @@ final class ImportInitial
                         $ids = [];
                         foreach ($positions as $pos => $nom) {
                             $e = $equipes->parNomEtSerie($nom, $serieId);
-                            if ($e === null) { throw new \RuntimeException("$code / $libelle : équipe $nom introuvable."); }
+                            if ($e === null) { throw new ImportEchec("$code / $libelle : équipe $nom introuvable."); }
                             $ids[(int) $pos] = (int) $e['id'];
                         }
                         $r = $creation->ajouterDivision((int) $saison['id'], $serieId, $libelle, $ids, $admin + ['est_admin' => 1]);
-                        if ($r['erreurs'] !== []) { throw new \RuntimeException(implode(' ', $r['erreurs'])); }
+                        if ($r['erreurs'] !== []) { throw new ImportEchec(implode(' ', $r['erreurs'])); }
                         $rapport[] = "$code : division $libelle créée (" . count($ids) . ' équipes).';
                     }
                 }
@@ -94,13 +97,13 @@ final class ImportInitial
                     $serieId = (int) $series->parCode($code)['id'];
                     $r = $db->one('SELECT r.id FROM agca_rencontre r JOIN agca_equipe a ON a.id = r.recevant_id JOIN agca_equipe b ON b.id = r.invite_id JOIN agca_journee j ON j.id = r.journee_id
                         WHERE a.serie_id = ? AND a.nom = ? AND b.nom = ? AND j.phase = ? AND j.numero = ?', [$serieId, $rec, $inv, $phase, $numero]);
-                    if ($r === null) { throw new \RuntimeException("Report $rec – $inv introuvable."); }
+                    if ($r === null) { throw new ImportEchec("Report $rec – $inv introuvable."); }
                     $this->app->service(RencontreRepository::class)->mettreAJourDate((int) $r['id'], $date, true);
                     $rapport[] = "Report $rec – $inv au $date.";
                 }
                 $this->app->service(JournalRepository::class)->ecrire($admin['id'] ?? null, 'import_initial', 'saison', (int) $saison['id'], ['rapport' => $rapport]);
             });
-        } catch (\RuntimeException $e) {
+        } catch (ImportEchec $e) {
             return ['rapport' => $rapport, 'erreurs' => [$e->getMessage()]];
         }
         return ['rapport' => $rapport, 'erreurs' => []];

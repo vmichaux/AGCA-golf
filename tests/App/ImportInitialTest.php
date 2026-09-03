@@ -11,6 +11,7 @@ use Agca\App\Repository\RencontreRepository;
 use Agca\App\Repository\SaisonRepository;
 use Agca\App\Repository\SerieRepository;
 use Agca\App\Repository\UtilisateurRepository;
+use Agca\App\Service\ImportEchec;
 use Agca\App\Service\ImportInitial;
 
 final class ImportInitialTest extends DbTestCase
@@ -85,5 +86,16 @@ final class ImportInitialTest extends DbTestCase
         self::assertSame([], $this->app->service(SaisonRepository::class)->toutes());
         self::assertSame(0, (int) $this->db->one('SELECT COUNT(*) AS n FROM agca_equipe')['n']);
         self::assertSame(0, (int) $this->db->one('SELECT COUNT(*) AS n FROM agca_utilisateur')['n']);
+    }
+
+    public function testErreurBaseNonMasquee(): void
+    {
+        // ImportEchec est réservée aux échecs métier intentionnels de l'import : une vraie erreur base
+        // de données (\PDOException, sous-classe de \RuntimeException en PHP 8) ne doit jamais être
+        // interceptée comme si c'était un simple refus d'import — elle doit remonter telle quelle pour
+        // ne pas être masquée en « erreur d'import » banale, tout en laissant la transaction faire son
+        // rollback normalement.
+        self::assertTrue(is_subclass_of(ImportEchec::class, \RuntimeException::class));
+        self::assertFalse(is_a(new \PDOException(), ImportEchec::class));
     }
 }
