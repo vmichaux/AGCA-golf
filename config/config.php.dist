@@ -1,0 +1,25 @@
+<?php
+declare(strict_types=1);
+// Copier en config/config.php et renseigner. config/config.php est hors git.
+return [
+    'db' => [
+        'dsn'  => 'mysql:host=127.0.0.1;dbname=agca_dev;charset=utf8mb4',
+        'user' => 'root',
+        'pass' => '',
+    ],
+    'mail' => [
+        'enabled'  => false,            // true en production une fois noreply@ créée
+        'host'     => 'smtp.ionos.fr',
+        'port'     => 587,
+        'user'     => 'noreply@agca-amitie.org',
+        'pass'     => '',
+        'from'     => 'noreply@agca-amitie.org',
+        'from_nom' => 'AGCA interclubs',
+        'admin'    => 'romichaux@wanadoo.fr', // copie de tous les e-mails
+    ],
+    'app' => [
+        'base_url' => 'http://localhost:8080',
+        'secret'   => 'changer-cette-chaine-aleatoire',
+        'debug'    => true,
+    ],
+];
