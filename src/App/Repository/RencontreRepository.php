@@ -1,0 +1,65 @@
+<?php
+declare(strict_types=1);
+namespace Agca\App\Repository;
+
+final class RencontreRepository extends Repository
+{
+    private const SELECT = 'SELECT r.*, d.libelle AS division_libelle, d.saison_id, sa.statut AS saison_statut, d.serie_id, se.code AS serie_code,
+        j.numero AS journee_numero, j.phase AS journee_phase, j.date_calendrier,
+        er.nom AS recevant_nom, er.golf_id AS recevant_golf_id, er.capitaine_email AS recevant_email,
+        ei.nom AS invite_nom, ei.golf_id AS invite_golf_id, ei.capitaine_email AS invite_email
+        FROM agca_rencontre r
+        JOIN agca_division d ON d.id = r.division_id
+        JOIN agca_saison sa ON sa.id = d.saison_id
+        JOIN agca_serie se ON se.id = d.serie_id
+        JOIN agca_journee j ON j.id = r.journee_id
+        JOIN agca_equipe er ON er.id = r.recevant_id
+        JOIN agca_equipe ei ON ei.id = r.invite_id';
+    private const ORDRE = " ORDER BY FIELD(j.phase, 'aller', 'retour'), j.numero, r.id";
+
+    public function creer(int $divisionId, int $journeeId, int $recevantId, int $inviteId, string $dateReelle): int
+    {
+        return $this->db->insert('INSERT INTO agca_rencontre (division_id, journee_id, recevant_id, invite_id, date_reelle) VALUES (?, ?, ?, ?, ?)', [$divisionId, $journeeId, $recevantId, $inviteId, $dateReelle]);
+    }
+
+    public function parId(int $id): ?array { return $this->db->one(self::SELECT . ' WHERE r.id = ?', [$id]); }
+    public function parDivision(int $divisionId): array { return $this->db->all(self::SELECT . ' WHERE r.division_id = ?' . self::ORDRE, [$divisionId]); }
+
+    public function parEquipeEtSaison(int $equipeId, int $saisonId): array
+    {
+        return $this->db->all(self::SELECT . ' WHERE d.saison_id = ? AND (r.recevant_id = ? OR r.invite_id = ?)' . self::ORDRE, [$saisonId, $equipeId, $equipeId]);
+    }
+
+    public function mettreAJourResultat(int $id, array $champs): void
+    {
+        $permis = ['statut', 'forfaitaire_id', 'total_pour', 'total_contre', 'pts_rencontre_pour', 'pts_rencontre_contre', 'bonus_invite', 'alertes', 'alertes_vues', 'enregistree_le', 'enregistree_par'];
+        $champs = array_intersect_key($champs, array_flip($permis));
+        if (array_key_exists('alertes', $champs) && is_array($champs['alertes'])) {
+            $champs['alertes'] = json_encode(array_values($champs['alertes']), JSON_UNESCAPED_UNICODE);
+        }
+        [$set, $p] = $this->set($champs);
+        $this->db->exec("UPDATE agca_rencontre SET $set WHERE id = :id", $p + ['id' => $id]);
+    }
+
+    public function mettreAJourDate(int $id, string $date, bool $reportee): void
+    {
+        $this->db->exec('UPDATE agca_rencontre SET date_reelle = ?, reportee = ? WHERE id = ?', [$date, (int) $reportee, $id]);
+    }
+
+    /** Rencontres à jouer dont la date est passée depuis 48 h, saison active, sans relance récente. */
+    public function aRelancer(string $limiteYmd, int $joursEntreRelances): array
+    {
+        return $this->db->all(self::SELECT . " WHERE r.statut = 'a_jouer' AND sa.statut = 'active' AND r.date_reelle <= ?
+            AND NOT EXISTS (SELECT 1 FROM agca_relance rl WHERE rl.rencontre_id = r.id AND rl.envoyee_le > DATE_SUB(NOW(), INTERVAL ? DAY))" . self::ORDRE, [$limiteYmd, $joursEntreRelances]);
+    }
+
+    public function avecAlertes(int $saisonId): array
+    {
+        return $this->db->all(self::SELECT . " WHERE d.saison_id = ? AND r.alertes_vues = 0 AND r.alertes IS NOT NULL AND JSON_LENGTH(r.alertes) > 0" . self::ORDRE, [$saisonId]);
+    }
+
+    public function marquerAlertesVues(int $id): void
+    {
+        $this->db->exec('UPDATE agca_rencontre SET alertes_vues = 1 WHERE id = ?', [$id]);
+    }
+}
