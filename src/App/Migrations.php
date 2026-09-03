@@ -16,7 +16,13 @@ final class Migrations
             $nom = basename($f);
             if (in_array($nom, $faites, true)) { continue; }
             $sql = file_get_contents($f);
-            foreach (self::decouper($sql) as $stmt) { $db->pdo()->exec($stmt); }
+            foreach (self::decouper($sql) as $i => $stmt) {
+                try {
+                    $db->pdo()->exec($stmt);
+                } catch (\PDOException $e) {
+                    throw new \RuntimeException("Migration $nom, instruction n°$i : " . $e->getMessage(), 0, $e);
+                }
+            }
             $db->exec('INSERT INTO agca_migration (nom, applique_le) VALUES (?, NOW())', [$nom]);
             $appliques[] = $nom;
         }
@@ -35,7 +41,9 @@ final class Migrations
     /** @return list<string> */
     private static function decouper(string $sql): array
     {
+        $sql = str_replace("\r\n", "\n", $sql);
         $sansCommentaires = preg_replace('/^\s*--.*$/m', '', $sql) ?? $sql;
-        return array_values(array_filter(array_map('trim', explode(";\n", $sansCommentaires . "\n")), fn($s) => $s !== ''));
+        $morceaux = preg_split('/;[ \t]*\r?\n/', $sansCommentaires . "\n") ?: [];
+        return array_values(array_filter(array_map('trim', $morceaux), fn($s) => $s !== ''));
     }
 }
