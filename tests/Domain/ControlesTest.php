@@ -26,6 +26,12 @@ final class ControlesTest extends TestCase
         self::assertSame([], Controles::verifier(Serie::mixte(), $parties));
     }
 
+    public function testBornesIndexIncluses(): void
+    {
+        $parties = [self::simple(self::j('A', 11.5), self::j('B', 22.0))];
+        self::assertSame([], Controles::verifier(Serie::mixte(), $parties));
+    }
+
     public function testIndexHorsBornesMixteSeulement(): void
     {
         $parties = [self::simple(self::j('A', 25.0), self::j('B', 18.0))];

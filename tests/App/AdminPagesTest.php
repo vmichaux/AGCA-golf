@@ -41,6 +41,9 @@ final class AdminPagesTest extends DbTestCase
         $cap = $this->app->service(UtilisateurRepository::class)->creer(['identifiant' => 'SALON', 'serie_id' => $m, 'hash_sha1' => sha1('x')]);
         $this->app->session()->demarrer(); $this->app->session()->set('utilisateur_id', $cap);
         self::assertSame(403, $this->req('GET', '/admin')->statut);
+        self::assertSame(403, $this->req('POST', '/admin/utilisateurs', ['identifiant' => 'X'])->statut);
+        self::assertSame(403, $this->req('POST', '/admin/rencontre/1/forfait', ['camp' => 'recevant'])->statut);
+        self::assertSame(403, $this->req('GET', '/admin/saisons')->statut);
     }
 
     public function testPagesAdminEtActions(): void
