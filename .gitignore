@@ -3,3 +3,4 @@ config/config.php
 .superpowers/
 .phpunit.cache/
 .phpunit.result.cache
+.claude/launch.json
