@@ -8,6 +8,7 @@ use Agca\App\Repository\DivisionRepository;
 use Agca\App\Repository\EquipeRepository;
 use Agca\App\Repository\GolfRepository;
 use Agca\App\Repository\JourneeRepository;
+use Agca\App\Repository\JournalRepository;
 use Agca\App\Repository\PartieRepository;
 use Agca\App\Repository\RencontreRepository;
 use Agca\App\Repository\SaisonRepository;
@@ -70,5 +71,23 @@ final class ForfaitTest extends DbTestCase
     {
         $this->expectException(HttpException::class);
         $this->app->service(Forfait::class)->declarer($this->rencontre, 'invite', ['id' => 2, 'identifiant' => 'SALON', 'est_admin' => 0, 'equipe_id' => $this->rec]);
+    }
+
+    public function testForfaitSurFeuilleEnregistreeConserveLesPartiesDansLeJournal(): void
+    {
+        $this->app->service(PartieRepository::class)->remplacer($this->rencontre, [
+            ['numero' => 1, 'type' => 'simple', 'resultat' => 'G', 'score_as' => 0, 'pts_pour' => 2, 'pts_contre' => 0],
+            ['numero' => 2, 'type' => 'simple', 'resultat' => 'P', 'score_as' => 0, 'pts_pour' => 0, 'pts_contre' => 2],
+            ['numero' => 3, 'type' => 'double', 'resultat' => 'N', 'score_as' => 0, 'pts_pour' => 1, 'pts_contre' => 1],
+        ]);
+
+        $this->app->service(Forfait::class)->declarer($this->rencontre, 'recevant', $this->admin);
+
+        $journal = $this->app->service(JournalRepository::class)->parCible('rencontre', $this->rencontre);
+        self::assertSame('forfait', $journal[0]['action']);
+        $detail = json_decode((string) $journal[0]['detail'], true);
+        self::assertArrayHasKey('parties_effacees', $detail);
+        self::assertCount(3, $detail['parties_effacees']);
+        self::assertSame('a_jouer', $detail['statut_precedent']);
     }
 }

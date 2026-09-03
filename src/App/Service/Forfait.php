@@ -21,12 +21,14 @@ final class Forfait
         $serie = $this->app->service(SerieRepository::class)->parId((int) $r['serie_id'])['serie'];
         $calcul = CalculRencontre::calculer($serie, [], $camp);
         $forfaitaire = $camp === 'recevant' ? (int) $r['recevant_id'] : (int) $r['invite_id'];
-        $this->app->db()->transaction(function () use ($r, $rencontreId, $calcul, $forfaitaire, $admin) {
+        $partiesEffacees = $this->app->service(PartieRepository::class)->parRencontre($rencontreId);
+        $this->app->db()->transaction(function () use ($r, $rencontreId, $calcul, $forfaitaire, $admin, $partiesEffacees) {
             $this->app->service(PartieRepository::class)->remplacer($rencontreId, []);
             $this->app->service(RencontreRepository::class)->mettreAJourResultat($rencontreId, ['statut' => 'forfait', 'forfaitaire_id' => $forfaitaire,
                 'total_pour' => $calcul->totalPour, 'total_contre' => $calcul->totalContre, 'pts_rencontre_pour' => $calcul->ptsPour, 'pts_rencontre_contre' => $calcul->ptsContre,
                 'bonus_invite' => $calcul->bonusInvite, 'alertes' => [], 'alertes_vues' => 1, 'enregistree_le' => date('Y-m-d H:i:s'), 'enregistree_par' => (int) $admin['id']]);
-            $this->app->service(JournalRepository::class)->ecrire((int) $admin['id'], 'forfait', 'rencontre', $rencontreId, ['forfaitaire' => $forfaitaire]);
+            $this->app->service(JournalRepository::class)->ecrire((int) $admin['id'], 'forfait', 'rencontre', $rencontreId,
+                ['forfaitaire' => $forfaitaire, 'statut_precedent' => $r['statut'], 'parties_effacees' => $partiesEffacees]);
         });
         $this->app->service(Notifications::class)->forfait($this->app->service(RencontreRepository::class)->parId($rencontreId), false, $admin);
     }
