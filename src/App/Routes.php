@@ -28,6 +28,9 @@ final class Routes
 
         $r->get('/capitaine', [CapitaineController::class, 'tableauDeBord']);
         $r->get('/rencontre/{id}', [FeuilleController::class, 'lecture']);
+        $r->get('/rencontre/{id}/saisie', [FeuilleController::class, 'formulaireSaisie']);
+        $r->post('/rencontre/{id}/saisie', [FeuilleController::class, 'enregistrer']);
+        $r->post('/rencontre/{id}/date', [FeuilleController::class, 'changerDate']);
         $r->get('/api/joueurs', [ApiController::class, 'joueurs']);
     }
 }

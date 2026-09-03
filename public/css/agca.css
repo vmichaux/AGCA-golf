@@ -40,3 +40,13 @@ table.vierge td{height:2.2rem}table.vierge tr.double td{background:var(--vert-cl
 .equipes{font-size:1.2rem;margin:.3rem 0}.equipes em{color:var(--gris);font-style:normal;margin:0 .5rem}
 .alertes{list-style:none;padding:0;margin:.3rem 0}.journal{font-size:.9rem}
 table.feuille tr.double td{background:var(--vert-clair)}
+fieldset.partie{border:1px solid var(--bord);border-radius:8px;background:#fff;margin:.75rem 0;padding:.5rem .75rem}
+fieldset.partie.double{border-color:var(--vert);background:#f3f8f5}
+legend{font-weight:700;color:var(--vert);padding:0 .3rem}
+.camps{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.camp-titre{font-weight:600;margin-bottom:.25rem}
+.joueur{display:flex;gap:.3rem;margin-bottom:.3rem}.joueur .nom{flex:1;min-width:0}.joueur .index{max-width:5rem}.joueur .sexe{max-width:4.5rem}
+.resultat{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;margin-top:.5rem}
+.radio{display:inline-flex;align-items:center;gap:.25rem;font-weight:400;margin:0}.radio input{width:auto}
+.totaux-direct{display:flex;flex-wrap:wrap;gap:1rem;font-size:1.1rem;padding:.6rem;background:var(--vert-clair);border-radius:8px;margin:1rem 0}
+@media (max-width:640px){.camps{grid-template-columns:1fr}}
