@@ -1,5 +1,10 @@
-<h1>Championnats interclubs AGCA</h1>
+<h1>Championnats interclubs AGCA<?= $saison ? ' — saison ' . e($saison['libelle']) : '' ?></h1>
+<p>L'Association des Golfs de la Coupe de l'Amitié organise deux championnats interclubs par équipes en région PACA.</p>
 <ul class="cartes">
-  <li><a href="/serie/M/classements"><strong>Mixte 2e série</strong><br>Classements, calendrier et suivi</a></li>
-  <li><a href="/serie/H1/classements"><strong>Homme 1re série</strong><br>Classements, calendrier et suivi</a></li>
+  <?php foreach ($series as $s): ?>
+    <li><a href="/serie/<?= e($s['code']) ?>/classements"><strong><?= e($s['libelle']) ?></strong><br>
+      <?= $s['code'] === 'M' ? '10 joueurs par équipe, index 11,5 à 22, 5 doubles et 10 simples sur 9 trous en net.' : '5 joueurs classés par index, 1 double et 4 simples sur 18 trous en brut.' ?><br>
+      <span class="aide">Classements · Calendrier et suivi · Feuille vierge · Règlement</span></a></li>
+  <?php endforeach; ?>
 </ul>
+<p><a class="bouton" href="/connexion">Espace capitaine</a></p>

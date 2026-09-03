@@ -30,3 +30,9 @@ input,select{font:inherit;padding:.45rem .5rem;border:1px solid #999;border-radi
 .aide{color:var(--gris);font-size:.85rem}
 .erreur-champ{color:var(--rouge);font-size:.85rem}
 @media (max-width:640px){body{font-size:15px}.contenu{padding:.6rem}th,td{padding:.3rem .35rem}}
+.sous-nav{display:flex;flex-wrap:wrap;gap:.75rem 1.25rem;align-items:center;margin:0 0 1rem;padding:.5rem 0;border-bottom:1px solid var(--bord)}
+.sous-nav select{width:auto}
+tr.nouvelle-journee td{border-top:2px solid var(--vert)}
+.report{color:var(--orange);font-weight:600}
+table.vierge td{height:2.2rem}table.vierge tr.double td{background:var(--vert-clair)}
+@media print{.entete,.pied,.no-print,.sous-nav,.flash{display:none}body{background:#fff;font-size:12px}}

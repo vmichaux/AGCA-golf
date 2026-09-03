@@ -17,5 +17,10 @@ final class Routes
         $r->post('/deconnexion', [AuthController::class, 'deconnexion']);
         $r->get('/mot-de-passe', [AuthController::class, 'formulaireMotDePasse']);
         $r->post('/mot-de-passe', [AuthController::class, 'motDePasse']);
+
+        $r->get('/serie/{code}/classements', [PublicController::class, 'classements']);
+        $r->get('/serie/{code}/suivi', [PublicController::class, 'suivi']);
+        $r->get('/serie/{code}/feuille-vierge', [PublicController::class, 'feuilleVierge']);
+        $r->get('/serie/{code}/reglement', [PublicController::class, 'reglement']);
     }
 }
