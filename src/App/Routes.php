@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Agca\App;
 
+use Agca\App\Controller\AdminController;
 use Agca\App\Controller\ApiController;
 use Agca\App\Controller\AuthController;
 use Agca\App\Controller\CapitaineController;
@@ -32,5 +33,19 @@ final class Routes
         $r->post('/rencontre/{id}/saisie', [FeuilleController::class, 'enregistrer']);
         $r->post('/rencontre/{id}/date', [FeuilleController::class, 'changerDate']);
         $r->get('/api/joueurs', [ApiController::class, 'joueurs']);
+
+        $r->get('/admin', [AdminController::class, 'index']);
+        $r->get('/admin/alertes', [AdminController::class, 'alertes']);
+        $r->post('/admin/rencontre/{id}/alertes-vues', [AdminController::class, 'alertesVues']);
+        $r->post('/admin/rencontre/{id}/forfait', [AdminController::class, 'forfait']);
+        $r->post('/admin/rencontre/{id}/annuler-forfait', [AdminController::class, 'annulerForfait']);
+        $r->get('/admin/utilisateurs', [AdminController::class, 'utilisateurs']);
+        $r->post('/admin/utilisateurs', [AdminController::class, 'creerUtilisateur']);
+        $r->post('/admin/utilisateurs/{id}/reinitialiser', [AdminController::class, 'reinitialiser']);
+        $r->post('/admin/utilisateurs/{id}/admin', [AdminController::class, 'basculerAdmin']);
+        $r->post('/admin/utilisateurs/{id}/rattacher', [AdminController::class, 'rattacher']);
+        $r->get('/admin/joueurs', [AdminController::class, 'joueurs']);
+        $r->post('/admin/joueurs/fusion', [AdminController::class, 'fusionnerJoueurs']);
+        $r->post('/admin/joueurs/{id}', [AdminController::class, 'modifierJoueur']);
     }
 }

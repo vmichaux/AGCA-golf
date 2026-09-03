@@ -20,6 +20,14 @@
   <?php endforeach; ?>
   </tbody></table></div>
 <?php endif; ?>
+<?php if ($peutModifierDate && empty($utilisateur['est_admin'])): ?>
+  <form method="post" action="/rencontre/<?= e($rencontre['id']) ?>/date" class="entete-feuille">
+    <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
+    <label for="date_reelle">Report : nouvelle date convenue avec l'adversaire</label>
+    <input id="date_reelle" type="date" name="date_reelle" value="<?= e($rencontre['date_reelle']) ?>" style="max-width:12rem"> <button class="bouton bouton-secondaire">Enregistrer la date</button>
+  </form>
+<?php endif; ?>
+<?php if (!empty($utilisateur['est_admin']) && $rencontre['saison_statut'] === 'active'): ?><?= $vue->inclure('feuille/partials/actions_admin', ['rencontre' => $rencontre, 'csrf' => $csrf]) ?><?php endif; ?>
 <p>
   <?php if ($peutSaisir): ?><a class="bouton" href="/rencontre/<?= e($rencontre['id']) ?>/saisie"><?= $rencontre['statut'] === 'a_jouer' ? 'Saisir la feuille' : 'Corriger la feuille' ?></a><?php endif; ?>
   <a class="bouton bouton-secondaire" href="<?= !empty($utilisateur['est_admin']) ? '/admin' : '/capitaine' ?>">Retour</a>
