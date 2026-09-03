@@ -8,6 +8,7 @@ use Agca\App\Controller\AuthController;
 use Agca\App\Controller\CapitaineController;
 use Agca\App\Controller\FeuilleController;
 use Agca\App\Controller\PublicController;
+use Agca\App\Controller\SaisonController;
 use Agca\App\Http\Router;
 
 final class Routes
@@ -35,6 +36,12 @@ final class Routes
         $r->get('/api/joueurs', [ApiController::class, 'joueurs']);
 
         $r->get('/admin', [AdminController::class, 'index']);
+        $r->get('/admin/saisons', [SaisonController::class, 'liste']);
+        $r->post('/admin/saisons', [SaisonController::class, 'creer']);
+        $r->get('/admin/saisons/{id}', [SaisonController::class, 'detail']);
+        $r->post('/admin/saisons/{id}/divisions', [SaisonController::class, 'ajouterDivision']);
+        $r->post('/admin/saisons/{id}/geler', [SaisonController::class, 'geler']);
+        $r->post('/admin/saisons/{id}/activer', [SaisonController::class, 'activer']);
         $r->get('/admin/alertes', [AdminController::class, 'alertes']);
         $r->post('/admin/rencontre/{id}/alertes-vues', [AdminController::class, 'alertesVues']);
         $r->post('/admin/rencontre/{id}/forfait', [AdminController::class, 'forfait']);
