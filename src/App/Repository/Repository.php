@@ -19,6 +19,9 @@ abstract class Repository
     {
         $parts = []; $params = [];
         foreach ($champs as $k => $v) {
+            if (!is_string($k) || !preg_match('/^[a-z][a-z0-9_]{0,63}$/', $k)) {
+                throw new \InvalidArgumentException("Nom de colonne invalide : " . (string) $k);
+            }
             $parts[] = "`$k` = :$k";
             $params[$k] = is_bool($v) ? (int) $v : (is_array($v) ? json_encode($v, JSON_UNESCAPED_UNICODE) : $v);
         }

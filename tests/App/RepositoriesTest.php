@@ -132,4 +132,10 @@ final class RepositoriesTest extends DbTestCase
         $l = $u->parId($idM);
         self::assertSame([0, null, null, '$2y$x'], [(int) $l['tentatives'], $l['bloque_jusqua'], $l['hash_sha1'], $l['hash_bcrypt']]);
     }
+
+    public function testCleDeColonneInvalideRefusee(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->app->service(EquipeRepository::class)->creer(['golf_id' => 1, 'serie_id' => 1, 'nom' => 'X', 'nom` = 1, `actif' => 1]);
+    }
 }
