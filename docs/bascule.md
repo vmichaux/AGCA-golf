@@ -4,11 +4,11 @@
 1. PHP : version 8.2 ou plus récente pour le domaine agca-amitie.org.
 2. MySQL : base existante (même serveur), vérifier la version 8 ; noter hôte, nom de base, utilisateur, mot de passe.
 3. Boîte e-mail `noreply@agca-amitie.org` créée ; noter le mot de passe et le serveur SMTP (smtp.ionos.fr, port 587 STARTTLS ou 465 SSL). Tant qu'elle n'existe pas : `mail.enabled = false` (les e-mails sont journalisés, rien n'est envoyé).
-4. Tâche cron quotidienne (IONOS « Tâches cron ») : `php /chemin/agca-app/bin/relances.php` à 07:00.
+4. Tâche cron quotidienne (IONOS « Tâches cron ») : `php /agca-app/bin/relances.php` à 07:00.
 5. Sauvegarde complète de la base actuelle (export phpMyAdmin) avant toute opération.
 
 ## Fichiers
-1. En local : `composer install --no-dev --optimize-autoloader`, `composer test` vert, puis `composer install` (rétablit les outils de dev).
+1. En local : `composer test` vert, puis `composer install --no-dev --optimize-autoloader` (vendor/ sans les outils de test, prêt pour la copie), déposer les fichiers (étape 2), puis `composer install` pour rétablir les outils de développement.
 2. Déposer le dépôt complet (sauf `config/config.php`, `.git`, `tests/`) dans un dossier hors racine web, par exemple `/agca-app/`.
 3. Créer `/agca-app/config/config.php` à partir de `config.php.dist` avec les accès MySQL, SMTP, `app.base_url = https://www.agca-amitie.org`, `app.debug = false`, un `app.secret` aléatoire.
 4. Racine web du domaine : pointer `agca-amitie.org` vers `/agca-app/public` (IONOS → Domaines → répertoire cible). Si ce n'est pas possible, déposer le `.htaccess` de la racine du dépôt à la racine web : il redirige tout vers `public/`.
