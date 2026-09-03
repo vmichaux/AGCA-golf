@@ -4,11 +4,13 @@ namespace Agca\App;
 
 final class Session
 {
+    public function __construct(private bool $https = true) {}
+
     public function demarrer(): void
     {
         if (PHP_SAPI === 'cli') { $_SESSION ??= []; return; }
         if (session_status() === PHP_SESSION_ACTIVE) { return; }
-        session_set_cookie_params(['httponly' => true, 'samesite' => 'Lax', 'secure' => !empty($_SERVER['HTTPS'])]);
+        session_set_cookie_params(['httponly' => true, 'samesite' => 'Lax', 'secure' => $this->https]);
         session_name('agca');
         session_start();
     }

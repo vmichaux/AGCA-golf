@@ -25,7 +25,7 @@ abstract class DbTestCase extends TestCase
         return [
             'db' => ['dsn' => getenv('AGCA_TEST_DSN'), 'user' => getenv('AGCA_TEST_USER') ?: 'root', 'pass' => getenv('AGCA_TEST_PASS') ?: ''],
             'mail' => ['enabled' => false, 'host' => '', 'port' => 587, 'user' => '', 'pass' => '', 'from' => 'noreply@test', 'from_nom' => 'AGCA test', 'admin' => 'admin@test'],
-            'app' => ['base_url' => 'http://test', 'secret' => 'secret-test', 'debug' => true],
+            'app' => ['base_url' => 'http://test', 'secret' => 'secret-test', 'debug' => true, 'https' => false],
         ];
     }
 }

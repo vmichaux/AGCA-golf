@@ -35,7 +35,7 @@ final class App
 
     public function racine(): string { return $this->racine; }
     public function db(): Db { return $this->db ??= Db::depuisConfig($this->config); }
-    public function session(): Session { return $this->session ??= new Session(); }
+    public function session(): Session { return $this->session ??= new Session((bool) $this->config('app.https', true)); }
     public function view(): View { return $this->view ??= new View($this->racine . '/templates'); }
     public function auth(): Auth { return $this->auth ??= new Auth($this); }
 

@@ -15,11 +15,12 @@ return [
         'pass'     => '',
         'from'     => 'noreply@agca-amitie.org',
         'from_nom' => 'AGCA interclubs',
-        'admin'    => 'romichaux@wanadoo.fr', // copie de tous les e-mails
+        'admin'    => 'adresse.admin@exemple.fr', // copie de tous les e-mails, à renseigner
     ],
     'app' => [
         'base_url' => 'http://localhost:8080',
         'secret'   => 'changer-cette-chaine-aleatoire',
-        'debug'    => true,
+        'debug'    => false, // passer à true en local
+        'https'    => true,  // false uniquement en local http
     ],
 ];
