@@ -62,7 +62,11 @@ final class AdminPagesTest extends DbTestCase
         $g = $this->app->service(GolfRepository::class)->trouverOuCreer('GAP');
         $j = $this->app->service(JoueurRepository::class);
         $a = $j->trouverOuCreer($g, 'DUPONT', 'H', 12.0, null); $b = $j->trouverOuCreer($g, 'DUPOND', 'H', 12.0, null);
-        self::assertStringContainsString('DUPOND', $this->req('GET', '/admin/joueurs?golf=' . $g)->corps);
+        $pageJoueurs = $this->req('GET', '/admin/joueurs?golf=' . $g)->corps;
+        self::assertStringContainsString('DUPOND', $pageJoueurs);
+        self::assertStringContainsString('form="joueur-' . $a . '"', $pageJoueurs);
+        self::assertStringContainsString('id="joueur-' . $a . '"', $pageJoueurs);
+        self::assertStringNotContainsString('<tr><form', $pageJoueurs);
         self::assertSame(302, $this->req('POST', '/admin/joueurs/fusion', ['source_id' => $b, 'cible_id' => $a])->statut);
         self::assertSame((string) $a, (string) $j->parId($b)['fusionne_dans']);
         $this->req('POST', '/admin/joueurs/' . $a, ['nom' => 'Dupont', 'prenom' => 'Paul', 'sexe' => 'H']);

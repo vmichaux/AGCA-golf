@@ -4,12 +4,13 @@
 <div class="tableau-defilant"><table>
   <thead><tr><th>Nom</th><th>Prénom</th><th>H/D</th><th class="num">Dernier index</th><th></th></tr></thead>
   <tbody><?php foreach ($joueurs as $j): ?>
-    <tr><form method="post" action="/admin/joueurs/<?= e($j['id']) ?>"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
-      <td><input name="nom" value="<?= e($j['nom']) ?>"></td><td><input name="prenom" value="<?= e($j['prenom']) ?>"></td>
-      <td><select name="sexe" style="width:auto"><option value="">?</option><option value="H" <?= $j['sexe'] === 'H' ? 'selected' : '' ?>>H</option><option value="D" <?= $j['sexe'] === 'D' ? 'selected' : '' ?>>D</option></select></td>
-      <td class="num"><?= e($j['dernier_index'] ?? '') ?></td><td><button class="bouton bouton-secondaire">Enregistrer</button></td>
-    </form></tr>
+    <tr>
+      <td><input name="nom" value="<?= e($j['nom']) ?>" form="joueur-<?= e($j['id']) ?>"></td><td><input name="prenom" value="<?= e($j['prenom']) ?>" form="joueur-<?= e($j['id']) ?>"></td>
+      <td><select name="sexe" form="joueur-<?= e($j['id']) ?>" style="width:auto"><option value="">?</option><option value="H" <?= $j['sexe'] === 'H' ? 'selected' : '' ?>>H</option><option value="D" <?= $j['sexe'] === 'D' ? 'selected' : '' ?>>D</option></select></td>
+      <td class="num"><?= e($j['dernier_index'] ?? '') ?></td><td><button class="bouton bouton-secondaire" form="joueur-<?= e($j['id']) ?>">Enregistrer</button></td>
+    </tr>
   <?php endforeach; ?></tbody></table></div>
+<?php foreach ($joueurs as $j): ?><form id="joueur-<?= e($j['id']) ?>" method="post" action="/admin/joueurs/<?= e($j['id']) ?>"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"></form><?php endforeach; ?>
 <h2>Fusionner deux doublons</h2>
 <form method="post" action="/admin/joueurs/fusion" onsubmit="return confirm('Fusionner ? Les parties du doublon seront réaffectées, l\'opération est définitive.')">
   <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
