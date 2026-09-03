@@ -47,10 +47,11 @@ final class RencontreRepository extends Repository
     }
 
     /** Rencontres à jouer dont la date est passée depuis 48 h, saison active, sans relance récente. */
-    public function aRelancer(string $limiteYmd, int $joursEntreRelances): array
+    public function aRelancer(string $limiteYmd, int $joursEntreRelances, ?string $reference = null): array
     {
+        $reference ??= date('Y-m-d H:i:s');
         return $this->db->all(self::SELECT . " WHERE r.statut = 'a_jouer' AND sa.statut = 'active' AND r.date_reelle <= ?
-            AND NOT EXISTS (SELECT 1 FROM agca_relance rl WHERE rl.rencontre_id = r.id AND rl.envoyee_le > DATE_SUB(NOW(), INTERVAL ? DAY))" . self::ORDRE, [$limiteYmd, $joursEntreRelances]);
+            AND NOT EXISTS (SELECT 1 FROM agca_relance rl WHERE rl.rencontre_id = r.id AND rl.envoyee_le > DATE_SUB(?, INTERVAL ? DAY))" . self::ORDRE, [$limiteYmd, $reference, $joursEntreRelances]);
     }
 
     public function avecAlertes(int $saisonId): array

@@ -4,9 +4,9 @@ namespace Agca\App\Repository;
 
 final class RelanceRepository extends Repository
 {
-    public function enregistrer(int $rencontreId): void
+    public function enregistrer(int $rencontreId, ?string $quand = null): void
     {
-        $this->db->exec('INSERT INTO agca_relance (rencontre_id) VALUES (?)', [$rencontreId]);
+        $this->db->exec('INSERT INTO agca_relance (rencontre_id, envoyee_le) VALUES (?, ?)', [$rencontreId, $quand ?? date('Y-m-d H:i:s')]);
     }
 
     public function derniere(int $rencontreId): ?string
