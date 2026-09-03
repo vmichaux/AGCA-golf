@@ -36,3 +36,7 @@ tr.nouvelle-journee td{border-top:2px solid var(--vert)}
 .report{color:var(--orange);font-weight:600}
 table.vierge td{height:2.2rem}table.vierge tr.double td{background:var(--vert-clair)}
 @media print{.entete,.pied,.no-print,.sous-nav,.flash{display:none}body{background:#fff;font-size:12px}}
+.entete-feuille{background:#fff;border:1px solid var(--bord);border-radius:8px;padding:.75rem 1rem;margin-bottom:1rem}
+.equipes{font-size:1.2rem;margin:.3rem 0}.equipes em{color:var(--gris);font-style:normal;margin:0 .5rem}
+.alertes{list-style:none;padding:0;margin:.3rem 0}.journal{font-size:.9rem}
+table.feuille tr.double td{background:var(--vert-clair)}

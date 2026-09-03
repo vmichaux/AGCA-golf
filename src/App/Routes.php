@@ -2,7 +2,10 @@
 declare(strict_types=1);
 namespace Agca\App;
 
+use Agca\App\Controller\ApiController;
 use Agca\App\Controller\AuthController;
+use Agca\App\Controller\CapitaineController;
+use Agca\App\Controller\FeuilleController;
 use Agca\App\Controller\PublicController;
 use Agca\App\Http\Router;
 
@@ -22,5 +25,9 @@ final class Routes
         $r->get('/serie/{code}/suivi', [PublicController::class, 'suivi']);
         $r->get('/serie/{code}/feuille-vierge', [PublicController::class, 'feuilleVierge']);
         $r->get('/serie/{code}/reglement', [PublicController::class, 'reglement']);
+
+        $r->get('/capitaine', [CapitaineController::class, 'tableauDeBord']);
+        $r->get('/rencontre/{id}', [FeuilleController::class, 'lecture']);
+        $r->get('/api/joueurs', [ApiController::class, 'joueurs']);
     }
 }
