@@ -4,3 +4,4 @@ config/config.php
 .phpunit.cache/
 .phpunit.result.cache
 .claude/launch.json
+public/maquette/
