@@ -96,6 +96,20 @@ final class EnregistrementFeuilleTest extends DbTestCase
         self::assertSame('a_jouer', $this->app->service(RencontreRepository::class)->parId($this->rencontre)['statut']);
     }
 
+    public function testDateHorsSaisonBloquante(): void
+    {
+        $svc = $this->app->service(EnregistrementFeuille::class);
+        $post = $this->post();
+        $post['date_reelle'] = '2028-01-01';
+        $r = $svc->enregistrer($this->rencontre, $post, $this->capitaine);
+        self::assertCount(1, $r['erreurs']);
+        self::assertStringContainsString('hors de la saison', $r['erreurs'][0]);
+        self::assertSame('a_jouer', $this->app->service(RencontreRepository::class)->parId($this->rencontre)['statut']);
+        $erreur = $svc->changerDate($this->rencontre, '2025-01-01', $this->capitaine);
+        self::assertNotNull($erreur);
+        self::assertStringContainsString('hors de la saison', $erreur);
+    }
+
     public function testInviteNePeutPasSaisir(): void
     {
         $u = $this->app->service(UtilisateurRepository::class);

@@ -8,6 +8,7 @@ use Agca\App\Repository\JoueurRepository;
 use Agca\App\Repository\JournalRepository;
 use Agca\App\Repository\PartieRepository;
 use Agca\App\Repository\RencontreRepository;
+use Agca\App\Repository\SaisonRepository;
 use Agca\App\Repository\SerieRepository;
 use Agca\Domain\CalculRencontre;
 use Agca\Domain\Controles;
@@ -69,6 +70,10 @@ final class EnregistrementFeuille
         if (!$acces->peutSaisir($r, $utilisateur)) { throw new HttpException(403, 'Cette feuille ne peut plus être modifiée. Contactez l\'administrateur.'); }
         $serie = $this->app->service(SerieRepository::class)->parId((int) $r['serie_id'])['serie'];
         $lu = $this->lire($serie, $post);
+        if ($lu['date_reelle'] !== null && $this->dateHorsSaison($r, $lu['date_reelle'])) {
+            $saison = $this->app->service(SaisonRepository::class)->parId((int) $r['saison_id']);
+            $lu['erreurs'][] = 'Date du match hors de la saison (du ' . fmt_date($saison['date_debut']) . ' au ' . fmt_date($saison['date_fin']) . ').';
+        }
         if ($lu['erreurs'] !== []) { return ['erreurs' => $lu['erreurs'], 'alertes' => []]; }
         $correction = $r['statut'] !== 'a_jouer';
         $alertes = Controles::verifier($serie, $lu['parties']);
@@ -115,11 +120,21 @@ final class EnregistrementFeuille
         if (!$acces->peutModifierDate($r, $utilisateur)) { return 'La date ne peut plus être modifiée. Contactez l\'administrateur.'; }
         $d = self::lireDate($date);
         if ($d === null) { return 'Date illisible (attendu : jour/mois/année).'; }
+        if ($this->dateHorsSaison($r, $d)) {
+            $saison = $this->app->service(SaisonRepository::class)->parId((int) $r['saison_id']);
+            return 'Date du match hors de la saison (du ' . fmt_date($saison['date_debut']) . ' au ' . fmt_date($saison['date_fin']) . ').';
+        }
         if ($d === $r['date_reelle']) { return null; }
         $this->app->service(RencontreRepository::class)->mettreAJourDate($rencontreId, $d, $d !== $r['date_calendrier']);
         $this->app->service(JournalRepository::class)->ecrire((int) $utilisateur['id'], 'report', 'rencontre', $rencontreId, ['de' => $r['date_reelle'], 'a' => $d]);
         $this->app->service(Notifications::class)->report($this->app->service(RencontreRepository::class)->parId($rencontreId), $r['date_reelle'], $utilisateur);
         return null;
+    }
+
+    private function dateHorsSaison(array $r, string $ymd): bool
+    {
+        $saison = $this->app->service(SaisonRepository::class)->parId((int) $r['saison_id']);
+        return $ymd < $saison['date_debut'] || $ymd > $saison['date_fin'];
     }
 
     /** Accepte Y-m-d, d/m/Y, d-m-Y ; retourne Y-m-d ou null. */
