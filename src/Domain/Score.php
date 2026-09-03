@@ -46,4 +46,12 @@ final class Score
         if ($resultat === null) { return true; }
         return $this->as ? $resultat === 'N' : $resultat !== 'N';
     }
+
+    /** Texte d'affichage à partir des colonnes agca_partie ; chaîne vide si aucun score. */
+    public static function texteDepuisColonnes(int|string|null $trous, int|string|null $restants, bool|int|string $as): string
+    {
+        if ((bool) $as) { return 'AS'; }
+        if ($trous === null || $trous === '') { return ''; }
+        return (new self((int) $trous, (int) ($restants ?? 0), false))->texte();
+    }
 }

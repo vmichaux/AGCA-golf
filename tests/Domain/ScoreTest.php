@@ -53,4 +53,12 @@ final class ScoreTest extends TestCase
         self::assertFalse(Score::depuisTexte('1UP')->coherentAvec('N'));
         self::assertTrue(Score::depuisTexte('1UP')->coherentAvec(null));
     }
+
+    public function testTexteDepuisColonnes(): void
+    {
+        self::assertSame('3&2', Score::texteDepuisColonnes('3', '2', '0'));
+        self::assertSame('AS', Score::texteDepuisColonnes(null, null, '1'));
+        self::assertSame('', Score::texteDepuisColonnes(null, null, 0));
+        self::assertSame('1 UP', Score::texteDepuisColonnes('1', '0', 0));
+    }
 }

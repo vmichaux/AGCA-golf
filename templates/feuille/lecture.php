@@ -6,7 +6,7 @@
 <div class="tableau-defilant"><table class="feuille">
   <thead><tr><th>#</th><th>Recevant</th><th class="num">Index</th><th class="num">Pts</th><th>Score</th><th class="num">Pts</th><th>Invité</th><th class="num">Index</th></tr></thead>
   <tbody>
-  <?php foreach ($parties as $p): $s = $p['score_as'] ? 'AS' : ($p['score_trous'] === null ? '' : ($p['score_restants'] ? $p['score_trous'] . '&' . $p['score_restants'] : $p['score_trous'] . ' UP')); ?>
+  <?php foreach ($parties as $p): $s = \Agca\Domain\Score::texteDepuisColonnes($p['score_trous'], $p['score_restants'], $p['score_as']); ?>
     <tr class="<?= $p['type'] === 'double' ? 'double' : '' ?>">
       <td><?= e($p['numero']) ?><?= $p['type'] === 'double' ? ' D' : '' ?></td>
       <td><?= e($p['rec_nom1']) ?><?= $p['rec_sexe1'] ? ' (' . e($p['rec_sexe1']) . ')' : '' ?><?= $p['rec_nom2'] ? '<br>' . e($p['rec_nom2']) . ($p['rec_sexe2'] ? ' (' . e($p['rec_sexe2']) . ')' : '') : '' ?></td>
