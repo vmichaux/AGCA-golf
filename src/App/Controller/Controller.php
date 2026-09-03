@@ -15,6 +15,7 @@ abstract class Controller
     protected function rendre(string $template, array $vars = [], int $statut = 200): Response
     {
         $v = $this->app->view();
+        $v->partager('utilisateur', $this->app->auth()->utilisateur());
         $v->partager('flashs', $this->app->session()->consommerFlashs());
         $v->partager('csrf', $this->app->session()->csrf());
         $v->partager('base_url', (string) $this->app->config('app.base_url', ''));
@@ -40,5 +41,24 @@ abstract class Controller
     protected function interdit(string $message = 'Accès refusé'): never
     {
         throw new HttpException(403, $message);
+    }
+
+    /** @return array<string, mixed> utilisateur connecté */
+    protected function exigerConnexion(): array
+    {
+        $u = $this->app->auth()->utilisateur();
+        if ($u === null) {
+            $this->app->session()->flash('info', 'Merci de vous connecter.');
+            throw new HttpException(302, '/connexion');
+        }
+        return $u;
+    }
+
+    /** @return array<string, mixed> */
+    protected function exigerAdmin(): array
+    {
+        $u = $this->exigerConnexion();
+        if (!$u['est_admin']) { $this->interdit('Réservé à l\'administrateur.'); }
+        return $u;
     }
 }

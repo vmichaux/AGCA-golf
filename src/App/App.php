@@ -13,6 +13,7 @@ final class App
     private ?Session $session = null;
     private ?View $view = null;
     private ?Router $router = null;
+    private ?Auth $auth = null;
     /** @var array<string, object> */
     private array $services = [];
 
@@ -36,6 +37,7 @@ final class App
     public function db(): Db { return $this->db ??= Db::depuisConfig($this->config); }
     public function session(): Session { return $this->session ??= new Session(); }
     public function view(): View { return $this->view ??= new View($this->racine . '/templates'); }
+    public function auth(): Auth { return $this->auth ??= new Auth($this); }
 
     public function router(): Router
     {
@@ -59,6 +61,7 @@ final class App
             $ctrl = new $classe($this);
             return $ctrl->$methode($req, ...array_values($route['params']));
         } catch (HttpException $e) {
+            if ($e->statut === 302) { return Response::redirection($e->getMessage()); }
             return Response::html($this->view()->rendre('erreur', ['statut' => $e->statut, 'message' => $e->getMessage()]), $e->statut);
         } catch (\Throwable $e) {
             error_log((string) $e);
