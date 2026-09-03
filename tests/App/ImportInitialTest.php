@@ -75,4 +75,15 @@ final class ImportInitialTest extends DbTestCase
         $r = $svc->executer($this->donnees(), ['id' => null, 'est_admin' => 1]);
         self::assertNotSame([], $r['erreurs']);
     }
+
+    public function testEchecEnCoursDImportNeLaisseRien(): void
+    {
+        $d = $this->donnees();
+        $d['divisions']['M'][0][1][4] = 'INCONNUE';
+        $r = $this->app->service(ImportInitial::class)->executer($d, ['id' => null, 'est_admin' => 1]);
+        self::assertNotSame([], $r['erreurs']);
+        self::assertSame([], $this->app->service(SaisonRepository::class)->toutes());
+        self::assertSame(0, (int) $this->db->one('SELECT COUNT(*) AS n FROM agca_equipe')['n']);
+        self::assertSame(0, (int) $this->db->one('SELECT COUNT(*) AS n FROM agca_utilisateur')['n']);
+    }
 }
