@@ -1,0 +1,52 @@
+:root{--vert:#1d4d3a;--vert-clair:#e6efe9;--gris:#555;--bord:#c9d6cf;--rouge:#b3261e;--orange:#c77700;--fond:#fafaf8}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.45;color:#1a1a1a;background:var(--fond)}
+a{color:var(--vert)}
+.entete{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1rem;padding:.6rem 1rem;background:var(--vert);color:#fff}
+.entete a{color:#fff;text-decoration:none}
+.marque{font-weight:700;font-size:1.2rem}.marque span{font-weight:400;opacity:.85}
+.nav{display:flex;flex-wrap:wrap;gap:.75rem;margin-left:auto}
+.inline{display:inline}.lien{background:none;border:0;color:#fff;cursor:pointer;font:inherit;padding:0}
+.contenu{max-width:1100px;margin:0 auto;padding:1rem}
+.pied{text-align:center;color:var(--gris);font-size:.85rem;padding:2rem 1rem}
+h1{font-size:1.5rem;color:var(--vert);margin:.5rem 0 1rem}h2{font-size:1.2rem;color:var(--vert);margin:1.5rem 0 .5rem}
+.flash{padding:.6rem .9rem;border-radius:6px;margin-bottom:1rem}
+.flash-succes{background:#e3f4e8;color:#155a2f}.flash-erreur{background:#fbe6e4;color:#7f1d15}.flash-info{background:#e8eef7;color:#1d3f6d}
+.cartes{list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.cartes a{display:block;padding:1rem;background:#fff;border:1px solid var(--bord);border-radius:8px;text-decoration:none;color:inherit}
+table{border-collapse:collapse;width:100%;background:#fff;font-size:.95rem}
+th,td{border:1px solid var(--bord);padding:.4rem .5rem;text-align:left;vertical-align:top}
+th{background:var(--vert-clair)}
+.num{text-align:right;white-space:nowrap}
+.tableau-defilant{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.pastille{display:inline-block;min-width:1.2em;padding:0 .35em;border-radius:1em;background:var(--orange);color:#fff;font-size:.75rem;text-align:center}
+.pastille-forfait{background:var(--rouge)}
+.bouton{display:inline-block;padding:.55rem 1rem;background:var(--vert);color:#fff;border:0;border-radius:6px;font:inherit;cursor:pointer;text-decoration:none}
+.bouton-secondaire{background:#fff;color:var(--vert);border:1px solid var(--vert)}
+.bouton-danger{background:var(--rouge)}
+label{display:block;font-weight:600;margin:.6rem 0 .2rem}
+input,select{font:inherit;padding:.45rem .5rem;border:1px solid #999;border-radius:5px;width:100%;max-width:26rem}
+.champ-court{max-width:6rem}
+.aide{color:var(--gris);font-size:.85rem}
+.erreur-champ{color:var(--rouge);font-size:.85rem}
+@media (max-width:640px){body{font-size:15px}.contenu{padding:.6rem}th,td{padding:.3rem .35rem}}
+.sous-nav{display:flex;flex-wrap:wrap;gap:.75rem 1.25rem;align-items:center;margin:0 0 1rem;padding:.5rem 0;border-bottom:1px solid var(--bord)}
+.sous-nav select{width:auto}
+tr.nouvelle-journee td{border-top:2px solid var(--vert)}
+.report{color:var(--orange);font-weight:600}
+table.vierge td{height:2.2rem}table.vierge tr.double td{background:var(--vert-clair)}
+@media print{.entete,.pied,.no-print,.sous-nav,.flash{display:none}body{background:#fff;font-size:12px}}
+.entete-feuille{background:#fff;border:1px solid var(--bord);border-radius:8px;padding:.75rem 1rem;margin-bottom:1rem}
+.equipes{font-size:1.2rem;margin:.3rem 0}.equipes em{color:var(--gris);font-style:normal;margin:0 .5rem}
+.alertes{list-style:none;padding:0;margin:.3rem 0}.journal{font-size:.9rem}
+table.feuille tr.double td{background:var(--vert-clair)}
+fieldset.partie{border:1px solid var(--bord);border-radius:8px;background:#fff;margin:.75rem 0;padding:.5rem .75rem}
+fieldset.partie.double{border-color:var(--vert);background:#f3f8f5}
+legend{font-weight:700;color:var(--vert);padding:0 .3rem}
+.camps{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.camp-titre{font-weight:600;margin-bottom:.25rem}
+.joueur{display:flex;gap:.3rem;margin-bottom:.3rem}.joueur .nom{flex:1;min-width:0}.joueur .index{max-width:5rem}.joueur .sexe{max-width:4.5rem}
+.resultat{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;margin-top:.5rem}
+.radio{display:inline-flex;align-items:center;gap:.25rem;font-weight:400;margin:0}.radio input{width:auto}
+.totaux-direct{display:flex;flex-wrap:wrap;gap:1rem;font-size:1.1rem;padding:.6rem;background:var(--vert-clair);border-radius:8px;margin:1rem 0}
+@media (max-width:640px){.camps{grid-template-columns:1fr}}

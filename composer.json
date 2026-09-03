@@ -1,0 +1,29 @@
+{
+  "name": "agca/interclubs",
+  "description": "Site interclubs AGCA — championnats Mixte et H1",
+  "type": "project",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.2",
+    "ext-pdo": "*",
+    "ext-pdo_mysql": "*",
+    "ext-mbstring": "*",
+    "ext-json": "*",
+    "phpmailer/phpmailer": "^6.9"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.0"
+  },
+  "autoload": {
+    "psr-4": { "Agca\\Domain\\": "src/Domain/", "Agca\\App\\": "src/App/" },
+    "files": ["src/App/helpers.php"]
+  },
+  "autoload-dev": {
+    "psr-4": { "Agca\\Tests\\": "tests/" }
+  },
+  "scripts": {
+    "test": "phpunit --colors=always",
+    "serve": "php -S localhost:8080 -t public public/index.php"
+  },
+  "config": { "sort-packages": true, "platform": { "php": "8.2" } }
+}

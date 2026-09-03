@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/bootstrap.php" colors="true" failOnWarning="true">
+  <testsuites>
+    <testsuite name="domain"><directory>tests/Domain</directory></testsuite>
+    <testsuite name="app"><directory>tests/App</directory></testsuite>
+  </testsuites>
+  <php>
+    <env name="AGCA_TEST_DSN" value="mysql:host=127.0.0.1;dbname=agca_test;charset=utf8mb4"/>
+    <env name="AGCA_TEST_USER" value="root"/>
+    <env name="AGCA_TEST_PASS" value=""/>
+  </php>
+</phpunit>
