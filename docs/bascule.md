@@ -4,15 +4,16 @@
 1. PHP : version 8.2 ou plus récente pour le domaine agca-amitie.org.
 2. MySQL : base existante (même serveur), vérifier la version 8 ; noter hôte, nom de base, utilisateur, mot de passe.
 3. Boîte e-mail `noreply@agca-amitie.org` créée ; noter le mot de passe et le serveur SMTP (smtp.ionos.fr, port 587 STARTTLS ou 465 SSL). Tant qu'elle n'existe pas : `mail.enabled = false` (les e-mails sont journalisés, rien n'est envoyé).
-4. Tâche cron quotidienne (IONOS « Tâches cron ») : `php /agca-app/bin/relances.php` à 07:00.
+4. Tâche cron quotidienne (IONOS « Tâches cron ») : `/usr/bin/php8.2 /agca-app/bin/relances.php` à 07:00 (chemin absolu du binaire PHP, requis par IONOS).
 5. Sauvegarde complète de la base actuelle (export phpMyAdmin) avant toute opération.
 
 ## Fichiers
 1. En local : `composer test` vert, puis `composer install --no-dev --optimize-autoloader` (vendor/ sans les outils de test, prêt pour la copie), déposer les fichiers (étape 2), puis `composer install` pour rétablir les outils de développement.
 2. Déposer le dépôt complet (sauf `config/config.php`, `.git`, `tests/`) dans un dossier hors racine web, par exemple `/agca-app/`.
 3. Créer `/agca-app/config/config.php` à partir de `config.php.dist` avec les accès MySQL, SMTP, `app.base_url = https://www.agca-amitie.org`, `app.debug = false`, un `app.secret` aléatoire.
-4. Racine web du domaine : pointer `agca-amitie.org` vers `/agca-app/public` (IONOS → Domaines → répertoire cible). Si ce n'est pas possible, déposer le `.htaccess` de la racine du dépôt à la racine web : il redirige tout vers `public/`.
-5. Les anciennes pages (`index.html`, `*.php`, images, photos) restent en place dans l'ancien dossier ; elles ne sont plus liées mais restent accessibles par URL directe le temps de la phase 2.
+4. Racine web du domaine : pointer `agca-amitie.org` vers `/agca-app/public` (IONOS → Domaines → répertoire cible) — c'est la configuration recommandée. Si ce n'est pas possible, déposer le `.htaccess` de la racine du dépôt à la racine web : il redirige tout vers `public/` ; ce repli est provisoire (les dossiers `config/`, `src/`, `db/`, `templates/`, `tests/`, `vendor/` et `bin/` portent alors chacun un `.htaccess Require all denied`, à ne pas retirer tant que la racine web n'est pas basculée sur `public/`).
+5. L'application doit être servie à la racine du domaine (`https://www.agca-amitie.org/`), les URL générées (`app.base_url`, liens dans les e-mails) sont absolues et supposent ce point d'entrée.
+6. Les anciennes pages (`index.html`, `*.php`, images, photos) restent en place dans l'ancien dossier ; elles ne sont plus liées mais restent accessibles par URL directe le temps de la phase 2.
 
 ## Base de données
 1. `php bin/migrate.php /agca-app/config/config.php` → crée les tables `agca_*` à côté des anciennes (aucune table ancienne modifiée).
