@@ -10,3 +10,4 @@ public/documents/*
 !public/documents/.htaccess
 .agca-test-db
 .worktrees/
+*.zip

@@ -3,7 +3,7 @@
         'name' => 'agca/interclubs',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '38f7069b4ec71ee12b6ec90a382ab383a10d64ef',
+        'reference' => 'd678caf7fb3358c90ffa3f806da7ead068134d19',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'agca/interclubs' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '38f7069b4ec71ee12b6ec90a382ab383a10d64ef',
+            'reference' => 'd678caf7fb3358c90ffa3f806da7ead068134d19',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
