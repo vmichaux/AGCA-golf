@@ -36,19 +36,15 @@ final class ContenuInitialTest extends DbTestCase
         self::assertSame('https://www.golf-valgarde.com', $golfs->parId($v)['site_web']);
         self::assertSame('Aix-en-Provence', $golfs->parNom('AIX-EN-PROVENCE')['ville']);
         self::assertCount(19, $golfs->membres());
-        // Note : la spec (§5) et le brief de la tâche annoncent « 24 dossiers listés dans la spec », mais la
-        // spec ne fait que citer deux exemples de nommage (imagesCHALLENGE2018 … imagesanniversaire35ans) sans
-        // jamais énumérer les 24 dossiers. Faute d'une liste faisant autorité, db/contenu/initial.php reconstruit
-        // les albums UNIQUEMENT à partir des éditions réellement attestées dans db/contenu/sources/*.txt (une
-        // galerie par en-tête d'édition trouvé dans challenge.txt, master.txt, tournoi.txt, trophee.txt), plus
-        // l'album anniversaire cité par la spec — soit 29 albums, tous traçables à une source. Aucun album
-        // « Voyage » n'est créé (aucune édition n'est documentée). Voir task-5-report.md.
-        self::assertCount(29, $app->service(AlbumRepository::class)->tous());
+        // Les 24 albums correspondent aux 24 galeries réelles listées dans db/contenu/sources/galeries.txt
+        // (relevées des liens de l'ancien index.html) : un album qui ne pointerait pas vers un dossier existant
+        // produirait un lien mort sur /photos.
+        self::assertCount(24, $app->service(AlbumRepository::class)->tous());
         // idempotence
         $pages->modifier((int) $pages->parSlug('voyage')['id'], ['corps_md' => 'modifié', 'corps_html' => '<p>modifié</p>']);
         $r2 = $app->service(ContenuInitial::class)->executer(null);
         self::assertSame('<p>modifié</p>', $pages->parSlug('voyage')['corps_html']);
-        self::assertCount(29, $app->service(AlbumRepository::class)->tous());
+        self::assertCount(24, $app->service(AlbumRepository::class)->tous());
         self::assertCount(1, $c->palmares((int) $master['id']));
         self::assertCount(19, $golfs->membres());
     }

@@ -1,0 +1,25 @@
+# Dossiers de galeries photo présents sur www.agca-amitie.org (liens de l'ancien index.html, relevés le 3 septembre 2026)
+imagesCHALLENGE2018/
+imagesCHALLENGE2023/
+imagesMASTER1-2018/
+imagesMASTER2-2018/
+imagesMASTER2019/
+imagesMASTER2020/
+imagesMASTER2022/
+imagesMASTER2023/
+imagesTOURNOI2018/
+imagesTOURNOI2020/
+imagesTOURNOI2024/
+imagesTOURNOI_2022/
+imagesTOURNOI_2023/
+imagesTROPHEE_2018/
+imagesTROPHEE_2019/
+imagesTROPHEE_2020/
+imagesTROPHEE_2021/
+imagesTROPHEE_2022/
+imagesTROPHEE_2023/
+imagesTROPHEE_2024/
+imagesTROPHEE_2025/
+imagesVOYAGE2024/
+imagesVOYAGE2025/
+imagesanniversaire35ans/
