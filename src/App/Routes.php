@@ -54,5 +54,8 @@ final class Routes
         $r->get('/admin/joueurs', [AdminController::class, 'joueurs']);
         $r->post('/admin/joueurs/fusion', [AdminController::class, 'fusionnerJoueurs']);
         $r->post('/admin/joueurs/{id}', [AdminController::class, 'modifierJoueur']);
+
+        RoutesContenu::declarer($r);
+        RoutesSite::declarer($r);
     }
 }

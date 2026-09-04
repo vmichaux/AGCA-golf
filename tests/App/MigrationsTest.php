@@ -7,7 +7,7 @@ final class MigrationsTest extends DbTestCase
     public function testSchemaCreeEtSeriesInserees(): void
     {
         $tables = array_column($this->db->all("SELECT TABLE_NAME AS t FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME LIKE 'agca\\_%' ORDER BY 1"), 't');
-        foreach (['agca_saison', 'agca_serie', 'agca_golf', 'agca_equipe', 'agca_utilisateur', 'agca_division', 'agca_division_equipe', 'agca_journee', 'agca_rencontre', 'agca_partie', 'agca_joueur', 'agca_journal', 'agca_relance', 'agca_migration'] as $t) {
+        foreach (['agca_saison', 'agca_serie', 'agca_golf', 'agca_equipe', 'agca_utilisateur', 'agca_division', 'agca_division_equipe', 'agca_journee', 'agca_rencontre', 'agca_partie', 'agca_joueur', 'agca_journal', 'agca_relance', 'agca_migration', 'agca_page', 'agca_actualite', 'agca_competition', 'agca_palmares', 'agca_organigramme', 'agca_album', 'agca_document', 'agca_page_document'] as $t) {
             self::assertContains($t, $tables);
         }
         $series = $this->db->all('SELECT code, structure FROM agca_serie ORDER BY ordre');

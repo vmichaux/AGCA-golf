@@ -4,6 +4,7 @@
   <li><a href="/admin/utilisateurs"><strong>Identifiants</strong><br>Mots de passe, droits admin, rattachement aux équipes</a></li>
   <li><a href="/admin/joueurs"><strong>Joueurs</strong><br>Corrections et fusion de doublons par golf</a></li>
   <li><a href="/admin/saisons"><strong>Saisons</strong><br>Nouvelle saison, divisions, gel</a></li>
+  <li><a href="/admin/contenu"><strong>Contenu du site</strong><br>Pages, actualités, compétitions, golfs, organigramme, albums, documents</a></li>
   <?php foreach ($series as $s): ?><li><a href="/serie/<?= e($s['code']) ?>/suivi"><strong><?= e($s['libelle']) ?></strong><br>Suivi et accès aux feuilles (correction, forfait, date)</a></li><?php endforeach; ?>
 </ul>
 <h2>Feuilles non saisies 48 h après la date du match</h2>
