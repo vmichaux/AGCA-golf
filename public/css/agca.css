@@ -173,7 +173,7 @@ table.tableau-champs{min-width:40rem}
 table.tableau-champs input{min-width:8rem}
 /* cartes de navigation (accueil provisoire, administration) */
 .cartes{list-style:none;margin:0;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-.cartes a{display:block;height:100%;padding:1.2rem 1.2rem 1.3rem;background:#fff;border:1px solid var(--bord);border-radius:6px;text-decoration:none;color:inherit}
+.cartes a,.cartes>li>div{display:block;height:100%;padding:1.2rem 1.2rem 1.3rem;background:#fff;border:1px solid var(--bord);border-radius:6px;text-decoration:none;color:inherit}
 .cartes a:hover{border-color:var(--vert);box-shadow:0 6px 18px rgba(31,61,46,.08)}
 .cartes strong{display:block;font-family:var(--titre);font-size:1.2rem;font-weight:800;color:var(--vert-profond);margin-bottom:.35rem}
 /* espace capitaine, feuille de match, administration */

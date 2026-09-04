@@ -57,6 +57,16 @@ final class ContenuRepositoriesTest extends DbTestCase
         self::assertNull($r->parId($a));
     }
 
+    /** Une actualité publiée mais datée dans le futur n'apparaît pas encore (publication programmée). */
+    public function testActualitePublieeDateeDemainNApparaitPas(): void
+    {
+        $r = $this->app->service(ActualiteRepository::class);
+        $demain = (new \DateTimeImmutable('tomorrow'))->format('Y-m-d');
+        $r->creer(['titre' => 'Programmée', 'slug' => 'programmee', 'date_publication' => $demain, 'resume' => null, 'corps_md' => 'p', 'corps_html' => '<p>p</p>', 'publie' => 1, 'modifie_par' => null]);
+        self::assertSame([], array_column($r->publiees(), 'titre'));
+        self::assertSame(0, $r->compterPubliees());
+    }
+
     public function testCompetitionsEtPalmares(): void
     {
         $r = $this->app->service(CompetitionRepository::class); $docs = $this->app->service(DocumentRepository::class);

@@ -42,4 +42,29 @@ final class RequestTest extends TestCase
         $req = new Request('GET', '/', [], [], '');
         self::assertFalse($req->estHead());
     }
+
+    public function testFichierValide(): void
+    {
+        $req = new Request('POST', '/', [], [], '', ['f' => ['name' => 'x.pdf', 'tmp_name' => '/tmp/php123', 'type' => 'application/pdf', 'size' => 10, 'error' => 0]]);
+        self::assertSame('x.pdf', $req->fichier('f')['name']);
+    }
+
+    /** `name`/`tmp_name` non chaînes (upload avec un nom de champ en tableau) : refusé, retourne null. */
+    public function testFichierRefuseNameNonChaine(): void
+    {
+        $req = new Request('POST', '/', [], [], '', ['f' => ['name' => ['x.pdf'], 'tmp_name' => '/tmp/php123', 'type' => 'application/pdf', 'size' => 10, 'error' => 0]]);
+        self::assertNull($req->fichier('f'));
+    }
+
+    public function testFichierRefuseTmpNameNonChaine(): void
+    {
+        $req = new Request('POST', '/', [], [], '', ['f' => ['name' => 'x.pdf', 'tmp_name' => ['/tmp/php123'], 'type' => 'application/pdf', 'size' => 10, 'error' => 0]]);
+        self::assertNull($req->fichier('f'));
+    }
+
+    public function testFichierAbsentRetourneNull(): void
+    {
+        $req = new Request('POST', '/', [], [], '', []);
+        self::assertNull($req->fichier('f'));
+    }
 }

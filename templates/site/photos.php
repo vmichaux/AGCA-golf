@@ -18,8 +18,13 @@ $lienAlbum = static function (?string $url): ?string {
   <ul class="cartes">
     <?php foreach ($albums as $a): ?>
     <?php $lien = $lienAlbum($a['url']); ?>
-    <?php /* Les galeries sortent de l'application (dossiers statiques, sites tiers) : nouvel onglet. */ ?>
-    <li><a <?= $lien === null ? '' : 'href="' . e($lien) . '" target="_blank" rel="noopener"' ?>><strong><?= e($a['titre']) ?></strong><?php if ($a['annee'] !== null): ?><span><?= e($a['annee']) ?></span><?php endif; ?></a></li>
+    <?php /* Les galeries sortent de l'application (dossiers statiques, sites tiers) : nouvel onglet.
+         Adresse invalide : pas de lien (jamais de <a> sans href), un simple <div>. */ ?>
+    <?php if ($lien !== null): ?>
+    <li><a href="<?= e($lien) ?>" target="_blank" rel="noopener"><strong><?= e($a['titre']) ?></strong><?php if ($a['annee'] !== null): ?><span><?= e($a['annee']) ?></span><?php endif; ?></a></li>
+    <?php else: ?>
+    <li><div><strong><?= e($a['titre']) ?></strong><?php if ($a['annee'] !== null): ?><span><?= e($a['annee']) ?></span><?php endif; ?></div></li>
+    <?php endif; ?>
     <?php endforeach; ?>
   </ul>
   <?php endif; ?>

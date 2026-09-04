@@ -5,7 +5,6 @@ namespace Agca\App\Controller;
 use Agca\App\Http\Request;
 use Agca\App\Http\Response;
 use Agca\App\Repository\DivisionRepository;
-use Agca\App\Repository\JourneeRepository;
 use Agca\App\Repository\RencontreRepository;
 use Agca\App\Repository\SerieRepository;
 use Agca\App\Service\ClassementService;
@@ -26,7 +25,6 @@ final class PublicController extends Controller
         $ctx = $this->contexte($req, $code);
         foreach ($ctx['divisions'] as &$d) { $d['rencontres'] = $this->app->service(RencontreRepository::class)->parDivision((int) $d['id']); }
         unset($d);
-        $ctx['journees'] = $ctx['saison'] === null ? [] : $this->app->service(JourneeRepository::class)->parSaisonEtSerie((int) $ctx['saison']['id'], (int) $ctx['serie']['id']);
         return $this->rendre('public/suivi', $ctx + ['titre' => 'Calendrier et suivi ' . $ctx['serie']['libelle']]);
     }
 

@@ -1,6 +1,6 @@
 <div class="entete-page"><div class="conteneur">
   <span class="etiquette">Championnat · <?= e($serie['libelle']) ?></span>
-  <h1 class="impression-titre">AGCA — <?= e($serie['libelle']) ?> — Feuille de match</h1>
+  <h1>AGCA — <?= e($serie['libelle']) ?> — Feuille de match</h1>
   <p class="actions no-print"><button type="button" class="bouton" onclick="window.print()">Imprimer</button> <a class="bouton bouton-secondaire" href="/serie/<?= e($serie['code']) ?>/classements">Retour</a></p>
 </div></div>
 <section class="bloc"><div class="conteneur">

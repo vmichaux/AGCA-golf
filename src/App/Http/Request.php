@@ -30,10 +30,13 @@ final class Request
     /** @return array<string, mixed> */
     public function tousPost(): array { return $this->post; }
 
-    /** Entrée de $_FILES pour ce champ, ou null. */
+    /** Entrée de $_FILES pour ce champ, ou null. `name`/`tmp_name` doivent être des chaînes (jamais un tableau imbriqué). */
     public function fichier(string $cle): ?array
     {
         $f = $this->fichiers[$cle] ?? null;
-        return is_array($f) && isset($f['tmp_name']) ? $f : null;
+        if (!is_array($f) || !isset($f['tmp_name'])) { return null; }
+        if (isset($f['name']) && !is_string($f['name'])) { return null; }
+        if (!is_string($f['tmp_name'])) { return null; }
+        return $f;
     }
 }

@@ -8,9 +8,9 @@ final class ActualiteRepository extends Repository
 
     public function publiees(int $limite = 10, int $decalage = 0): array
     {
-        return $this->db->all('SELECT * FROM agca_actualite WHERE publie = 1 ORDER BY date_publication DESC, id DESC LIMIT ' . (int) $limite . ' OFFSET ' . (int) $decalage);
+        return $this->db->all('SELECT * FROM agca_actualite WHERE publie = 1 AND date_publication <= CURDATE() ORDER BY date_publication DESC, id DESC LIMIT ' . (int) $limite . ' OFFSET ' . (int) $decalage);
     }
-    public function compterPubliees(): int { return (int) $this->db->one('SELECT COUNT(*) AS n FROM agca_actualite WHERE publie = 1')['n']; }
+    public function compterPubliees(): int { return (int) $this->db->one('SELECT COUNT(*) AS n FROM agca_actualite WHERE publie = 1 AND date_publication <= CURDATE()')['n']; }
     public function parId(int $id): ?array { return $this->db->one('SELECT * FROM agca_actualite WHERE id = ?', [$id]); }
     public function toutes(): array { return $this->db->all('SELECT * FROM agca_actualite ORDER BY date_publication DESC, id DESC'); }
 

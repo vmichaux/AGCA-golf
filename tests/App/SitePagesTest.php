@@ -150,6 +150,16 @@ final class SitePagesTest extends DbTestCase
         self::assertStringContainsString('rel="noopener"', $html);
     }
 
+    /** Une adresse d'album invalide (ni http(s)://, ni chemin absolu) n'est jamais rendue en lien sans href. */
+    public function testAlbumAvecUrlInvalideRenduSansLien(): void
+    {
+        $this->app->service(AlbumRepository::class)->creer(['titre' => 'Album cassé', 'annee' => 2020, 'url' => 'javascript:alert(1)', 'ordre' => 2]);
+        $html = $this->get('/photos');
+        self::assertStringContainsString('Album cassé', $html);
+        self::assertStringNotContainsString('<a >', $html);
+        self::assertStringNotContainsString('href="javascript:alert(1)"', $html);
+    }
+
     public function testListeDesActualites(): void
     {
         $html = $this->get('/actualites');

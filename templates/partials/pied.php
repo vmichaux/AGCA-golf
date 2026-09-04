@@ -20,7 +20,7 @@
     <p><a href="/page/<?= e($p['slug']) ?>"><?= e($p['titre']) ?></a></p>
     <?php endforeach; ?>
     <p><a href="/contact">Contact</a></p>
-    <p><a href="http://www.ffgolf.org/">Fédération française de golf</a></p>
+    <p><a href="https://www.ffgolf.org/">Fédération française de golf</a></p>
   </div>
   <div class="bas">
     <span>© <?= date('Y') ?> AGCA — Interclubs de golf en Provence-Alpes-Côte d'Azur</span>
