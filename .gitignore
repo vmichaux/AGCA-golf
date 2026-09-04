@@ -7,5 +7,6 @@ config/config.php
 public/maquette/
 public/documents/*
 !public/documents/.gitkeep
+!public/documents/.htaccess
 .agca-test-db
 .worktrees/

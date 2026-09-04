@@ -4,6 +4,7 @@ namespace Agca\Tests\App;
 
 use Agca\App\App;
 use Agca\App\Repository\DocumentRepository;
+use Agca\App\Repository\JournalRepository;
 use Agca\App\Repository\PageRepository;
 use Agca\App\Service\Documents;
 
@@ -78,8 +79,10 @@ final class DocumentsTest extends DbTestCase
         self::assertNotNull($svc->supprimer($id));
         $this->app->service(PageRepository::class)->definirDocuments($page, []);
         $fichier = $this->app->service(DocumentRepository::class)->parId($id)['fichier'];
-        self::assertNull($svc->supprimer($id));
+        self::assertNull($svc->supprimer($id, 42));
         self::assertFileDoesNotExist($this->dossier . '/' . $fichier);
         self::assertNull($this->app->service(DocumentRepository::class)->parId($id));
+        $ligne = $this->app->service(JournalRepository::class)->parCible('document', $id)[0];
+        self::assertSame(42, (int) $ligne['utilisateur_id'], 'l\'auteur de la suppression est journalisé');
     }
 }

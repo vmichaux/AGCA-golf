@@ -15,7 +15,7 @@
 5. L'application doit être servie à la racine du domaine (`https://www.agca-amitie.org/`), les URL générées (`app.base_url`, liens dans les e-mails) sont absolues et supposent ce point d'entrée.
 6. Les anciennes pages (`*.php`, autres qu'`index.html` — voir « Ouverture »), images, photos restent en place dans l'ancien dossier ; elles ne sont plus liées mais restent accessibles par URL directe le temps de la phase 2.
 7. Conserver à la racine web les dossiers `images*/` et le fichier `VOYAGE-AGCA.doc` de l'ancien site : ils sont référencés par les albums photo (`/photos`) et par la page Voyage.
-8. Créer `/agca-app/public/documents/` inscriptible par le PHP (`chmod 775`, propriétaire = utilisateur sous lequel PHP s'exécute) : c'est là que sont stockés les documents téléversés depuis l'espace admin (`/admin/contenu/documents`). Ce dossier n'est pas dans le dépôt (git-ignoré) et doit être sauvegardé au même rythme que la base une fois la bascule effectuée.
+8. Créer `/agca-app/public/documents/` inscriptible par le PHP (`chmod 775`, propriétaire = utilisateur sous lequel PHP s'exécute) : c'est là que sont stockés les documents téléversés depuis l'espace admin (`/admin/contenu/documents`). Ce dossier n'est pas dans le dépôt (git-ignoré) et doit être sauvegardé au même rythme que la base une fois la bascule effectuée. Le fichier `public/documents/.htaccess` (commité, exception du gitignore) doit être déposé avec le dossier : il désactive l'exécution PHP et le listing du répertoire pour tout fichier qui y serait téléversé.
 
 ## Base de données
 1. `php bin/migrate.php /agca-app/config/config.php` → crée les tables `agca_*` à côté des anciennes (aucune table ancienne modifiée).

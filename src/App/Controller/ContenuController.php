@@ -305,8 +305,8 @@ final class ContenuController extends Controller
 
     public function supprimerDocument(Request $req, string $id): Response
     {
-        $this->exigerAdmin(); $this->exigerCsrf($req);
-        $erreur = $this->app->service(Documents::class)->supprimer((int) $id);
+        $u = $this->exigerAdmin(); $this->exigerCsrf($req);
+        $erreur = $this->app->service(Documents::class)->supprimer((int) $id, (int) $u['id']);
         $this->flash($erreur === null ? 'succes' : 'erreur', $erreur ?? 'Document supprimé.');
         return $this->rediriger('/admin/contenu/documents');
     }

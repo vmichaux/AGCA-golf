@@ -55,7 +55,7 @@ final class Documents
         return ['id' => $id, 'erreur' => null];
     }
 
-    public function supprimer(int $id): ?string
+    public function supprimer(int $id, ?int $utilisateurId = null): ?string
     {
         $repo = $this->app->service(DocumentRepository::class);
         $d = $repo->parId($id);
@@ -64,7 +64,7 @@ final class Documents
         $chemin = $this->dossier() . '/' . $d['fichier'];
         if (is_file($chemin)) { unlink($chemin); }
         $repo->supprimer($id);
-        $this->app->service(JournalRepository::class)->ecrire(null, 'document_supprime', 'document', $id, ['fichier' => $d['fichier']]);
+        $this->app->service(JournalRepository::class)->ecrire($utilisateurId, 'document_supprime', 'document', $id, ['fichier' => $d['fichier']]);
         return null;
     }
 
