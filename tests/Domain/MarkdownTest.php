@@ -57,4 +57,15 @@ final class MarkdownTest extends TestCase
         self::assertSame('', Markdown::rendre("  \n\n  "));
         self::assertSame("<p>a</p>\n<p>b</p>", Markdown::rendre("a\r\n\r\nb"));
     }
+
+    public function testTexteBrutConserveLesChevrons(): void
+    {
+        self::assertSame('Handicap <18 requis pour participer', Markdown::texteBrut('Handicap <18 requis pour participer'));
+    }
+
+    public function testAsterisquesDansLesUrlsIntacts(): void
+    {
+        self::assertSame('<p><a href="/recherche?q=**football**" rel="noopener">doc</a></p>', Markdown::rendre('[doc](/recherche?q=**football**)'));
+        self::assertSame('<p><a href="/y" rel="noopener"><strong>x</strong></a> et <em>i</em></p>', Markdown::rendre('[**x**](/y) et *i*'));
+    }
 }

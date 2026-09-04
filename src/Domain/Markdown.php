@@ -46,7 +46,7 @@ final class Markdown
 
     public static function texteBrut(string $md, int $max = 200): string
     {
-        $t = strip_tags(html_entity_decode(self::rendre($md), ENT_QUOTES, 'UTF-8'));
+        $t = html_entity_decode(strip_tags(self::rendre($md)), ENT_QUOTES, 'UTF-8');
         $t = trim((string) preg_replace('/\s+/u', ' ', str_replace("\n", ' ', $t)));
         if (mb_strlen($t) > $max) { $t = rtrim(mb_substr($t, 0, $max)) . '…'; }
         return $t;
@@ -66,11 +66,21 @@ final class Markdown
 
     private static function enLigne(string $t): string
     {
-        $t = preg_replace_callback('/\[([^\]]+)\]\(([^\s]+)\)/', function (array $m): string {
+        $liens = [];
+        $t = preg_replace_callback('/\[([^\]]+)\]\(([^\s]+)\)/', function (array $m) use (&$liens): string {
             $url = html_entity_decode($m[2], ENT_QUOTES, 'UTF-8');
             if (!preg_match('#^(https?://|/(?!/)|mailto:|\#)#i', $url)) { return $m[1]; }
-            return '<a href="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" rel="noopener">' . $m[1] . '</a>';
+            $html = '<a href="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" rel="noopener">' . self::formater($m[1]) . '</a>';
+            $liens[] = $html;
+            return "\x00" . (count($liens) - 1) . "\x00";
         }, $t) ?? $t;
+        $t = self::formater($t);
+        foreach ($liens as $i => $html) { $t = str_replace("\x00" . $i . "\x00", $html, $t); }
+        return $t;
+    }
+
+    private static function formater(string $t): string
+    {
         $t = preg_replace('/\*\*(.+?)\*\*/s', '<strong>$1</strong>', $t) ?? $t;
         $t = preg_replace('/(?<![*\w])\*(?!\s)(.+?)(?<!\s)\*(?![*\w])/s', '<em>$1</em>', $t) ?? $t;
         return $t;
