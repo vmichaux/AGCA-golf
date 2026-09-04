@@ -91,6 +91,18 @@ final class ContenuAdminTest extends DbTestCase
         self::assertSame(302, $this->req('POST', '/admin/contenu/golfs', ['nom' => 'NOUVEAU', 'ville' => '', 'site_web' => '', 'membre' => '1', 'ordre' => '9'])->statut);
         self::assertStringContainsString('NOUVEAU', $this->req('GET', '/admin/contenu/golfs')->corps);
 
+        // le nom n'est plus mis en capitales par le contrôleur : l'admin peut saisir une casse mixte
+        $this->req('POST', "/admin/contenu/golfs/$g", ['nom' => 'Château-l\'Arc', 'ville' => 'Fuveau', 'site_web' => '', 'membre' => '1', 'ordre' => '0']);
+        self::assertSame('Château-l\'Arc', $this->app->service(GolfRepository::class)->parId($g)['nom']);
+
+        // site_web sans protocole ni www. refusé, avec message d'erreur ; www. accepté et préfixé https://
+        $avant = $this->app->service(GolfRepository::class)->parId($g)['site_web'];
+        $this->req('POST', "/admin/contenu/golfs/$g", ['nom' => 'Château-l\'Arc', 'ville' => 'Fuveau', 'site_web' => 'golfvalgarde.com', 'membre' => '1', 'ordre' => '0']);
+        self::assertSame($avant, $this->app->service(GolfRepository::class)->parId($g)['site_web'], 'site_web invalide : inchangé');
+        self::assertStringContainsString('Adresse du site web invalide', $this->req('GET', '/admin/contenu/golfs')->corps);
+        $this->req('POST', "/admin/contenu/golfs/$g", ['nom' => 'Château-l\'Arc', 'ville' => 'Fuveau', 'site_web' => 'www.golfvalgarde.com', 'membre' => '1', 'ordre' => '0']);
+        self::assertSame('https://www.golfvalgarde.com', $this->app->service(GolfRepository::class)->parId($g)['site_web']);
+
         self::assertSame(302, $this->req('POST', '/admin/contenu/organigramme', ['groupe' => 'bureau', 'fonction' => 'Président', 'prenom' => 'Guy', 'nom' => 'POMET', 'golf' => 'Valgarde', 'ordre' => '0'])->statut);
         self::assertStringContainsString('POMET', $this->req('GET', '/admin/contenu/organigramme')->corps);
         self::assertSame(302, $this->req('POST', '/admin/contenu/albums', ['titre' => 'Trophée 2025', 'annee' => '2025', 'url' => '/imagesTROPHEE_2025/', 'ordre' => '0'])->statut);

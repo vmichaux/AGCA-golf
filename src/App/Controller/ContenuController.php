@@ -219,9 +219,16 @@ final class ContenuController extends Controller
     {
         $u = $this->exigerAdmin(); $this->exigerCsrf($req);
         $repo = $this->app->service(GolfRepository::class);
-        $champs = ['nom' => mb_strtoupper(trim((string) $req->post('nom', ''))), 'ville' => trim((string) $req->post('ville', '')) ?: null, 'site_web' => trim((string) $req->post('site_web', '')) ?: null,
+        $nom = trim((string) $req->post('nom', ''));
+        if ($nom === '') { $this->flash('erreur', 'Le nom du golf est obligatoire.'); return $this->rediriger('/admin/contenu/golfs'); }
+        $siteWeb = trim((string) $req->post('site_web', ''));
+        if ($siteWeb !== '' && !preg_match('#^(https?://|www\.)#i', $siteWeb)) {
+            $this->flash('erreur', 'Adresse du site web invalide (doit commencer par http://, https:// ou www.).');
+            return $this->rediriger('/admin/contenu/golfs');
+        }
+        if (preg_match('#^www\.#i', $siteWeb)) { $siteWeb = 'https://' . $siteWeb; }
+        $champs = ['nom' => $nom, 'ville' => trim((string) $req->post('ville', '')) ?: null, 'site_web' => $siteWeb ?: null,
             'membre' => $req->post('membre') ? 1 : 0, 'ordre' => (int) $req->post('ordre', 0)];
-        if ($champs['nom'] === '') { $this->flash('erreur', 'Le nom du golf est obligatoire.'); return $this->rediriger('/admin/contenu/golfs'); }
         if ($id === null) { $gid = $repo->trouverOuCreer($champs['nom']); $repo->modifier($gid, $champs); }
         else { $gid = (int) $id; $repo->parId($gid) ?? $this->introuvable(); $repo->modifier($gid, $champs); }
         $this->app->service(JournalRepository::class)->ecrire((int) $u['id'], 'golf_modifie', 'golf', $gid, $champs);

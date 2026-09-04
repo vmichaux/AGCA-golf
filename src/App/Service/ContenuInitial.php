@@ -38,10 +38,11 @@ final class ContenuInitial
         foreach ($d['golfs'] as $g) {
             $existant = $golfs->parNom($g['nom']);
             $id = $existant === null ? $golfs->trouverOuCreer($g['nom']) : (int) $existant['id'];
-            $champs = ['membre' => 1];
+            // membre = 1 seulement à la création : un golf que l'admin a retiré des membres ne doit pas y revenir.
+            $champs = $existant === null ? ['membre' => 1] : [];
             if (empty($existant['ville']) && !empty($g['ville'])) { $champs['ville'] = $g['ville']; }
             if (empty($existant['site_web']) && !empty($g['site_web'])) { $champs['site_web'] = preg_match('#^https?://#', $g['site_web']) ? $g['site_web'] : 'https://' . $g['site_web']; }
-            $golfs->modifier($id, $champs);
+            if ($champs !== []) { $golfs->modifier($id, $champs); }
             $rapport[] = ($existant === null ? 'Golf créé : ' : 'Golf complété : ') . $g['nom'];
         }
         $albums = $this->app->service(AlbumRepository::class);
