@@ -11,7 +11,7 @@ final class Markdown
 {
     public static function rendre(string $md): string
     {
-        $texte = str_replace(["\r\n", "\r"], "\n", $md);
+        $texte = str_replace("\x00", '', str_replace(["\r\n", "\r"], "\n", $md));
         $texte = htmlspecialchars($texte, ENT_COMPAT | ENT_SUBSTITUTE, 'UTF-8');
         $lignes = explode("\n", $texte);
         $blocs = []; $i = 0; $n = count($lignes);

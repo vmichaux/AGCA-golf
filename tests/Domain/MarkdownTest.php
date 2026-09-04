@@ -58,6 +58,11 @@ final class MarkdownTest extends TestCase
         self::assertSame("<p>a</p>\n<p>b</p>", Markdown::rendre("a\r\n\r\nb"));
     }
 
+    public function testOctetsNulsIgnores(): void
+    {
+        self::assertSame('<p>prefix 0 milieu <a href="/a" rel="noopener">lien</a> fin</p>', Markdown::rendre("prefix \x000\x00 milieu [lien](/a) fin"));
+    }
+
     public function testTexteBrutConserveLesChevrons(): void
     {
         self::assertSame('Handicap <18 requis pour participer', Markdown::texteBrut('Handicap <18 requis pour participer'));
