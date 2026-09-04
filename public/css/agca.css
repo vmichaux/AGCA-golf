@@ -1,12 +1,12 @@
 @import url("/fonts/fonts.css");
 /* AGCA — feuille de style du site (maquette validée : docs/maquette/maquette.css) */
-:root{--vert-profond:#1f3d2e;--vert:#2f6a4f;--vert-clair:#e6efe9;--beige:#f4efe6;--ocre:#c9a24d;--encre:#1a1a1a;--gris:#5b5f5c;--bord:#d9d3c4;--blanc:#fff;--rouge:#b3261e;--titre:"Manrope","Inter",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;--sans:"Inter",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+:root{--vert-profond:#1f3d2e;--vert:#2f6a4f;--vert-clair:#e6efe9;--beige:#f4efe6;--ocre:#c9a24d;--ocre-fonce:#7d5f18;--encre:#1a1a1a;--gris:#5b5f5c;--bord:#d9d3c4;--blanc:#fff;--rouge:#b3261e;--titre:"Manrope","Inter",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;--sans:"Inter",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
 body{margin:0;font-family:var(--sans);font-size:16px;line-height:1.55;color:var(--encre);background:var(--blanc);min-height:100vh;display:flex;flex-direction:column}
 body>main{flex:1 0 auto}
 a{color:var(--vert)}img{max-width:100%;display:block}
 h1,h2,h3,.titre{font-family:var(--titre);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin:0}
-.etiquette{display:block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ocre);font-weight:600;margin-bottom:.6rem}
+.etiquette{display:block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ocre-fonce);font-weight:600;margin-bottom:.6rem}
 .conteneur{max-width:1180px;margin:0 auto;padding:0 1.25rem}
 .bouton{display:inline-block;padding:.7rem 1.2rem;border-radius:4px;background:var(--vert);color:#fff;text-decoration:none;font-weight:600;font-size:.95rem;border:1px solid var(--vert);font-family:inherit;line-height:1.2;cursor:pointer}
 .bouton.clair{background:transparent;color:#fff;border-color:rgba(255,255,255,.7)}
@@ -87,10 +87,10 @@ th,td{padding:.6rem 1rem;text-align:left;border-bottom:1px solid var(--bord);ver
 th{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gris);font-weight:600}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 tr:last-child td{border-bottom:0}
-td.rang{font-family:var(--titre);color:var(--ocre);font-size:1rem;font-weight:800;width:3rem}
+td.rang{font-family:var(--titre);color:var(--ocre-fonce);font-size:1rem;font-weight:800;width:3rem}
 .liste-rencontres{list-style:none;margin:0;padding:0}
 .liste-rencontres li{display:grid;grid-template-columns:5.5rem 1fr;gap:1rem;padding:.8rem 0;border-bottom:1px solid var(--bord)}
-.liste-rencontres .date{font-family:var(--titre);color:var(--ocre);font-size:1rem;font-weight:800;line-height:1.1}
+.liste-rencontres .date{font-family:var(--titre);color:var(--ocre-fonce);font-size:1rem;font-weight:800;line-height:1.1}
 .liste-rencontres .date small{display:block;font-family:var(--sans);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gris)}
 .liste-rencontres .div{font-size:.8rem;color:var(--gris)}
 .grille-5{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem}
@@ -101,7 +101,7 @@ td.rang{font-family:var(--titre);color:var(--ocre);font-size:1rem;font-weight:80
 .carte-comp .vainqueur b{display:block;color:var(--vert-profond)}
 .grille-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
 .actu{padding-top:1rem;border-top:2px solid var(--vert-profond)}
-.actu time{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ocre);font-weight:600}
+.actu time{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ocre-fonce);font-weight:600}
 .actu h3{font-size:1.35rem;margin:.5rem 0 .6rem;font-weight:600}
 .actu p{margin:0;color:var(--gris);font-size:.95rem}
 .grille-golfs{display:grid;grid-template-columns:repeat(6,1fr);gap:.8rem}
@@ -135,7 +135,7 @@ td.rang{font-family:var(--titre);color:var(--ocre);font-size:1rem;font-weight:80
 .encart .invitation{margin:0;font-size:.95rem;opacity:.95}.encart .invitation a{color:var(--ocre);font-weight:700}
 .grille-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
 .format{background:#fff;border:1px solid var(--bord);border-radius:8px;padding:1.4rem 1.3rem}
-.format .numero{display:block;font-family:var(--titre);font-weight:800;color:var(--ocre);font-size:.85rem;letter-spacing:.12em;margin-bottom:.8rem}
+.format .numero{display:block;font-family:var(--titre);font-weight:800;color:var(--ocre-fonce);font-size:.85rem;letter-spacing:.12em;margin-bottom:.8rem}
 .format h3{font-size:1.15rem;font-weight:800;margin-bottom:.6rem}
 .format p{margin:0;font-size:.95rem;color:#333}
 /* pied */
@@ -158,11 +158,11 @@ td.rang{font-family:var(--titre);color:var(--ocre);font-size:1rem;font-weight:80
 .division{margin-bottom:2.2rem}
 .division h2{font-size:1.5rem;font-weight:600;margin-bottom:.8rem;display:flex;flex-wrap:wrap;align-items:baseline;gap:.8rem}
 .division h2 small{font-family:var(--sans);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gris);font-weight:600}
-.pastille{display:inline-block;min-width:1.3em;padding:.05em .4em;border-radius:1em;background:var(--ocre);color:#fff;font-size:.72rem;font-weight:600;text-align:center}
-.pastille.forfait,.pastille-forfait{background:var(--rouge)}
+.pastille{display:inline-block;min-width:1.3em;padding:.05em .4em;border-radius:1em;background:var(--ocre);color:var(--vert-profond);font-size:.72rem;font-weight:600;text-align:center}
+.pastille.forfait,.pastille-forfait{background:var(--rouge);color:#fff}
 .journee-tete td{background:var(--vert-clair);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--vert-profond)}
 .aide{color:var(--gris);font-size:.85rem}
-.report{color:#8a6a1f;font-weight:600}
+.report{color:var(--ocre-fonce);font-weight:600}
 .tableau-defilant{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table.tableau-champs{min-width:40rem}
 table.tableau-champs input{min-width:8rem}
