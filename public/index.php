@@ -16,4 +16,5 @@ if (PHP_SAPI === 'cli-server') {
 }
 
 $app = new App(Config::charger());
-$app->executer(Request::depuisGlobales())->envoyer();
+$req = Request::depuisGlobales();
+$app->executer($req)->envoyer($req->estHead());
