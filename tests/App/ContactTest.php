@@ -28,9 +28,9 @@ final class ContactTest extends DbTestCase
     }
 
     /** @param array<string, string> $remplacements */
-    private function envoyer(array $remplacements = []): array
+    private function envoyer(array $remplacements = [], string $ip = '127.0.0.1'): array
     {
-        return $this->app->service(Contact::class)->envoyer($remplacements + self::VALIDE, $this->app->session());
+        return $this->app->service(Contact::class)->envoyer($remplacements + self::VALIDE, $this->app->session(), $ip);
     }
 
     private function dernierMail(): ?array
@@ -52,7 +52,7 @@ final class ContactTest extends DbTestCase
         $mail = $this->dernierMail();
         self::assertNotNull($mail);
         self::assertSame('admin@test', $mail['a']);
-        self::assertSame(['jean.dupont@example.org'], $mail['cc'], 'le demandeur reçoit une copie');
+        self::assertSame([], $mail['cc'], 'aucune copie au demandeur');
         self::assertSame('[AGCA contact] Engager une équipe', $mail['sujet']);
         self::assertStringContainsString('Jean Dupont', $mail['texte']);
         self::assertStringContainsString('Notre club souhaite engager une équipe', $mail['texte']);
@@ -111,13 +111,62 @@ final class ContactTest extends DbTestCase
         self::assertSame('[AGCA contact] Engager une équipe', $this->dernierMail()['sujet'], 'le deuxième message n\'est pas parti');
     }
 
-    /** Passé le délai, un nouvel envoi est accepté. */
+    /**
+     * Passé le délai de session ET le délai IP (l'horloge de la session est avancée manuellement,
+     * la ligne IP correspondante aussi : sans cela le plafond IP de 60 s bloquerait l'envoi).
+     */
     public function testNouvelEnvoiApresLeDelai(): void
     {
         self::assertTrue($this->envoyer()['ok']);
         $this->app->session()->set('contact_dernier', time() - 120);
+        $this->db->exec('UPDATE agca_contact_limite SET quand = ? WHERE ip = ?', [date('Y-m-d H:i:s', time() - 120), '127.0.0.1']);
         self::assertSame(['ok' => true, 'erreurs' => []], $this->envoyer(['objet' => 'Deuxième message']));
         self::assertSame('[AGCA contact] Deuxième message', $this->dernierMail()['sujet']);
         self::assertCount(2, $this->journalContact());
+    }
+
+    /** Contournement par jet du cookie de session : la même IP reste bloquée. */
+    public function testMemeIpDeuxSessionsRefuse(): void
+    {
+        self::assertTrue($this->envoyer()['ok']);
+        $_SESSION = []; // nouvelle session : le cookie a été jeté
+        $r = $this->envoyer(['objet' => 'Deuxième message']);
+        self::assertFalse($r['ok']);
+        self::assertStringContainsString('Trop de messages', $r['erreurs'][0]);
+        self::assertCount(1, $this->journalContact());
+    }
+
+    /** Une IP différente n'est pas concernée par la limitation de la première. */
+    public function testIpDifferenteAccepte(): void
+    {
+        self::assertTrue($this->envoyer()['ok']);
+        $_SESSION = [];
+        $r = $this->envoyer(['objet' => 'Deuxième message'], '203.0.113.9');
+        self::assertTrue($r['ok']);
+        self::assertCount(2, $this->journalContact());
+    }
+
+    /** 5 envois espacés sur 24 h pour une même IP : le 6e est refusé même hors du délai de 60 s. */
+    public function testPlafondIpSur24Heures(): void
+    {
+        for ($i = 0; $i < 5; $i++) {
+            $this->db->exec('INSERT INTO agca_contact_limite (ip, quand) VALUES (?, ?)', ['198.51.100.7', date('Y-m-d H:i:s', time() - 3600 * ($i + 2))]);
+        }
+        $r = $this->envoyer([], '198.51.100.7');
+        self::assertFalse($r['ok']);
+        self::assertStringContainsString('Trop de messages', $r['erreurs'][0]);
+        self::assertSame([], $this->journalContact());
+    }
+
+    /** Plafond global de 40 messages sur 24 h, toutes IP confondues. */
+    public function testPlafondGlobalSur24Heures(): void
+    {
+        for ($i = 0; $i < 40; $i++) {
+            $this->db->exec('INSERT INTO agca_contact_limite (ip, quand) VALUES (?, ?)', ['192.0.2.' . $i, date('Y-m-d H:i:s', time() - 3600)]);
+        }
+        $r = $this->envoyer([], '203.0.113.55');
+        self::assertFalse($r['ok']);
+        self::assertStringContainsString('Trop de messages', $r['erreurs'][0]);
+        self::assertSame([], $this->journalContact());
     }
 }

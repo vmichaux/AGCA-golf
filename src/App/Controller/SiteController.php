@@ -141,9 +141,9 @@ final class SiteController extends Controller
     public function envoyerContact(Request $req): Response
     {
         $this->exigerCsrf($req);
-        $r = $this->app->service(Contact::class)->envoyer($req->tousPost(), $this->app->session());
+        $r = $this->app->service(Contact::class)->envoyer($req->tousPost(), $this->app->session(), $req->ip());
         if (!$r['ok']) { return $this->rendreContact($req->tousPost(), $r['erreurs']); }
-        $this->flash('succes', 'Votre message a bien été envoyé. Vous en recevez une copie par e-mail.');
+        $this->flash('succes', 'Votre message a bien été envoyé.');
         return $this->rediriger('/contact');
     }
 

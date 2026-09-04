@@ -105,7 +105,7 @@ Toutes les actions : `exigerAdmin()`, jeton CSRF, journal `agca_journal` (action
 
 - `Domain\Markdown` : unitaires (chaque construction, échappement d'HTML injecté, liens `javascript:` refusés).
 - Dépôts de contenu et service Accueil : intégration sur `agca_test`.
-- Contact : envoi simulé, piège anti-robot, limitation.
+- Contact : envoi simulé, piège anti-robot, limitation par session et par IP (aucune copie au demandeur).
 - Téléversement : type refusé, taille refusée, nom régénéré.
 - Pages publiques et admin : tests de fumée HTTP (200, contenu attendu, 403 sans admin, CSRF).
 - Revue visuelle : maquette validée par le client avant développement ; vérification ordinateur / mobile en fin de chantier.

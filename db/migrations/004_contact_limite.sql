@@ -1,0 +1,6 @@
+CREATE TABLE agca_contact_limite (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  ip VARCHAR(45) NOT NULL,
+  quand DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  KEY idx_ip_quand (ip, quand)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
