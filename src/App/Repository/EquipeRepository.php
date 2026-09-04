@@ -18,6 +18,16 @@ final class EquipeRepository extends Repository
         return $this->db->one(self::SELECT . ' WHERE UPPER(e.nom) = UPPER(?) AND e.serie_id = ?', [trim($nom), $serieId]);
     }
 
+    /** Nombre d'équipes actives engagées dans une division de la saison. */
+    public function compterEngagees(int $saisonId): int
+    {
+        $l = $this->db->one('SELECT COUNT(DISTINCT de.equipe_id) AS n FROM agca_division_equipe de
+            JOIN agca_division d ON d.id = de.division_id
+            JOIN agca_equipe e ON e.id = de.equipe_id
+            WHERE d.saison_id = ? AND e.actif = 1', [$saisonId]);
+        return (int) ($l['n'] ?? 0);
+    }
+
     public function creer(array $champs): int
     {
         $champs += ['capitaine_nom' => null, 'capitaine_prenom' => null, 'capitaine_email' => null, 'capitaine_tel' => null, 'actif' => 1];

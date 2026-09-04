@@ -13,12 +13,6 @@ use Agca\App\Service\Saisons;
 
 final class PublicController extends Controller
 {
-    public function accueil(Request $req): Response
-    {
-        return $this->rendre('public/accueil', ['titre' => 'AGCA — Interclubs', 'series' => $this->app->service(SerieRepository::class)->toutes(),
-            'saison' => $this->app->service(Saisons::class)->courante(null)]);
-    }
-
     public function classements(Request $req, string $code): Response
     {
         $ctx = $this->contexte($req, $code);

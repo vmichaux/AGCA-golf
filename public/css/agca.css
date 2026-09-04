@@ -79,6 +79,8 @@ section.bloc.serre{padding:2.2rem 0}
 .deux-colonnes{display:grid;grid-template-columns:1.1fr .9fr;gap:2.5rem}
 .carte{background:#fff;border:1px solid var(--bord);border-radius:6px;overflow:hidden}
 .carte+.carte,.carte+.aide{margin-top:1.2rem}
+.carte+.titre-section{margin-top:1.8rem}
+.lien-calendrier{margin-top:1rem}
 .carte-tete{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.7rem 1rem;background:var(--vert-clair);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--vert-profond)}
 .carte-tete a{font-size:.8rem;letter-spacing:0;text-transform:none;font-weight:600}
 .carte-corps{padding:1.2rem 1.2rem 1.4rem}
@@ -95,7 +97,8 @@ td.rang{font-family:var(--titre);color:var(--ocre-fonce);font-size:1rem;font-wei
 .liste-rencontres .div{font-size:.8rem;color:var(--gris)}
 .grille-5{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem}
 .carte-comp{background:#fff;border:1px solid var(--bord);border-radius:6px;padding:1.3rem 1.2rem;display:flex;flex-direction:column;gap:.5rem;min-height:230px}
-.carte-comp h3{font-size:1.45rem;font-weight:600}
+.carte-comp h3{font-size:1.45rem;font-weight:600}.carte-comp h3 a,.actu h3 a{color:inherit;text-decoration:none}
+.carte-comp h3 a:hover,.actu h3 a:hover{color:var(--vert);text-decoration:underline;text-underline-offset:3px}
 .carte-comp .formule{color:var(--gris);font-size:.92rem;flex:1}
 .carte-comp .vainqueur{font-size:.82rem;border-top:1px solid var(--bord);padding-top:.7rem}
 .carte-comp .vainqueur b{display:block;color:var(--vert-profond)}
@@ -113,8 +116,8 @@ td.rang{font-family:var(--titre);color:var(--ocre-fonce);font-size:1rem;font-wei
 /* citation et storytelling */
 .citation{background:var(--vert);color:#fff}
 .citation .conteneur{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1.5rem;padding:1rem 1.25rem;font-family:var(--titre);font-weight:500;font-size:1.1rem}
-.citation a{color:var(--ocre);font-weight:700;text-decoration:none;margin-left:auto;white-space:nowrap}
-.citation a:hover{text-decoration:underline;text-underline-offset:4px}
+.citation a{color:#fff;font-weight:700;margin-left:auto;white-space:nowrap;text-decoration:underline;text-decoration-color:var(--ocre);text-decoration-thickness:2px;text-underline-offset:4px}
+.citation a:hover{text-decoration-color:#fff}
 .story{display:grid;grid-template-columns:1.25fr .75fr;gap:2.5rem;align-items:start}
 .story h2{font-size:2rem;font-weight:800;margin-bottom:1.2rem}
 .story h3{font-size:1.05rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--vert-profond);margin:1.4rem 0 .4rem}
@@ -128,16 +131,17 @@ td.rang{font-family:var(--titre);color:var(--ocre-fonce);font-size:1rem;font-wei
 .esprit{display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:center}
 .esprit h2{font-size:2.1rem;font-weight:800;margin-bottom:1rem;max-width:18ch}
 .esprit .lead{font-size:1.15rem;line-height:1.65;margin:0;max-width:52ch}
-.encart .points{list-style:none;margin:0 0 1.2rem;padding:0}
-.encart .points li{padding:.55rem 0 .55rem 1.4rem;position:relative;border-bottom:1px solid rgba(255,255,255,.15);font-size:.98rem;line-height:1.5}
-.encart .points li::before{content:"";position:absolute;left:0;top:1.05rem;width:8px;height:8px;border-radius:50%;background:var(--ocre)}
-.encart .points li:last-child{border-bottom:0}
-.encart .invitation{margin:0;font-size:.95rem;opacity:.95}.encart .invitation a{color:var(--ocre);font-weight:700}
+.esprit .lead p{margin:0 0 .8rem}.esprit .lead p:last-child{margin-bottom:0}
+.encart .points,.encart ul{list-style:none;margin:0 0 1.2rem;padding:0}
+.encart .points li,.encart ul li{padding:.55rem 0 .55rem 1.4rem;position:relative;border-bottom:1px solid rgba(255,255,255,.15);font-size:.98rem;line-height:1.5}
+.encart .points li::before,.encart ul li::before{content:"";position:absolute;left:0;top:1.05rem;width:8px;height:8px;border-radius:50%;background:var(--ocre)}
+.encart .points li:last-child,.encart ul li:last-child{border-bottom:0}
+.encart .invitation,.encart>p:last-child{margin:0;font-size:.95rem;opacity:.95}.encart .invitation a{color:var(--ocre);font-weight:700}
 .grille-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
 .format{background:#fff;border:1px solid var(--bord);border-radius:8px;padding:1.4rem 1.3rem}
 .format .numero{display:block;font-family:var(--titre);font-weight:800;color:var(--ocre-fonce);font-size:.85rem;letter-spacing:.12em;margin-bottom:.8rem}
 .format h3{font-size:1.15rem;font-weight:800;margin-bottom:.6rem}
-.format p{margin:0;font-size:.95rem;color:#333}
+.format p{margin:0;font-size:.95rem;color:#333}.format p+p,.format ul,.format ol{margin-top:.6rem}.format li{font-size:.95rem;color:#333}
 /* pied */
 .pied{background:var(--vert-profond);color:#fff;padding:3rem 0 2rem;font-size:.9rem}
 .pied .conteneur{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:2rem}

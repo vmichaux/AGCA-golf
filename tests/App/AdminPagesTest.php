@@ -49,7 +49,11 @@ final class AdminPagesTest extends DbTestCase
     public function testPagesAdminEtActions(): void
     {
         $this->app->session()->demarrer(); $this->app->session()->set('utilisateur_id', $this->adminId);
-        self::assertSame(200, $this->req('GET', '/admin')->statut);
+        $admin = $this->req('GET', '/admin');
+        self::assertSame(200, $admin->statut);
+        // gabarit commun : en-tête et menu partagés par toutes les pages
+        self::assertStringContainsString('class="entete"', $admin->corps);
+        self::assertStringContainsString('href="/competitions"', $admin->corps);
         self::assertSame(200, $this->req('GET', '/admin/alertes')->statut);
         self::assertStringContainsString('ADMIN', $this->req('GET', '/admin/utilisateurs')->corps);
 

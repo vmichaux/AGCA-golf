@@ -54,6 +54,36 @@ final class RencontreRepository extends Repository
             AND NOT EXISTS (SELECT 1 FROM agca_relance rl WHERE rl.rencontre_id = r.id AND rl.envoyee_le > DATE_SUB(?, INTERVAL ? DAY))" . self::ORDRE, [$limiteYmd, $reference, $joursEntreRelances]);
     }
 
+    /** Prochaines rencontres à jouer de la saison, à partir d'une date incluse (une seule requête). */
+    public function aVenir(int $saisonId, string $depuisYmd, int $limite): array
+    {
+        $limite = max(1, min(200, $limite));
+        return $this->db->all(self::SELECT . " WHERE d.saison_id = ? AND r.statut = 'a_jouer' AND r.date_reelle >= ?
+            ORDER BY r.date_reelle, se.ordre, d.ordre, d.id, r.id LIMIT " . $limite, [$saisonId, $depuisYmd]);
+    }
+
+    /** Première date à venir du calendrier réel de la saison (rencontres à jouer). */
+    public function premiereDateAVenir(int $saisonId, string $depuisYmd): ?string
+    {
+        $l = $this->db->one("SELECT MIN(r.date_reelle) AS date_reelle FROM agca_rencontre r
+            JOIN agca_division d ON d.id = r.division_id
+            WHERE d.saison_id = ? AND r.statut = 'a_jouer' AND r.date_reelle >= ?", [$saisonId, $depuisYmd]);
+        return $l === null || $l['date_reelle'] === null ? null : (string) $l['date_reelle'];
+    }
+
+    /** Résumé par série des rencontres à jouer d'une date : nombre de rencontres et de divisions. */
+    public function resumeParSerieALaDate(int $saisonId, string $ymd): array
+    {
+        return $this->db->all("SELECT se.code, se.libelle, MIN(j.numero) AS journee_numero, MIN(j.phase) AS journee_phase,
+            COUNT(*) AS nb_rencontres, COUNT(DISTINCT r.division_id) AS nb_divisions
+            FROM agca_rencontre r
+            JOIN agca_division d ON d.id = r.division_id
+            JOIN agca_serie se ON se.id = d.serie_id
+            JOIN agca_journee j ON j.id = r.journee_id
+            WHERE d.saison_id = ? AND r.statut = 'a_jouer' AND r.date_reelle = ?
+            GROUP BY se.id, se.code, se.libelle, se.ordre ORDER BY se.ordre", [$saisonId, $ymd]);
+    }
+
     public function avecAlertes(int $saisonId): array
     {
         return $this->db->all(self::SELECT . " WHERE d.saison_id = ? AND r.alertes_vues = 0 AND r.alertes IS NOT NULL AND JSON_LENGTH(r.alertes) > 0" . self::ORDRE, [$saisonId]);
