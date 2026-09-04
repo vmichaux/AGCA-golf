@@ -22,8 +22,11 @@
   function enLigne(t) {
     var liens = [];
     t = t.replace(/\[([^\]]+)\]\(([^\s]+)\)/g, function (m, texte, url) {
-      if (!/^(https?:\/\/|\/(?!\/)|mailto:|#)/i.test(url)) { return texte; }
-      var html = '<a href="' + echapper(url) + '" rel="noopener">' + formater(texte) + '</a>';
+      // t est déjà échappé une fois (voir rendre()) : décoder l'URL capturée avant de la tester et
+      // de la rééchapper, sinon « ?a=1&b=2 » resterait « ?a=1&amp;b=2 » dans le href (double échappement).
+      var brut = url.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
+      if (!/^(https?:\/\/|\/(?!\/)|mailto:|#)/i.test(brut)) { return texte; }
+      var html = '<a href="' + echapper(brut) + '" rel="noopener">' + formater(texte) + '</a>';
       liens.push(html);
       return '\u0000' + (liens.length - 1) + '\u0000';
     });

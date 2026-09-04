@@ -202,8 +202,10 @@ final class ContenuController extends Controller
     private function champsPalmares(Request $req): array
     {
         $md = trim((string) $req->post('detail_md', ''));
+        $documentId = (int) $req->post('document_id', 0) ?: null;
+        if ($documentId !== null && $this->app->service(DocumentRepository::class)->parId($documentId) === null) { $documentId = null; }
         return ['saison' => trim((string) $req->post('saison', '')) ?: date('Y'), 'lieu' => trim((string) $req->post('lieu', '')) ?: null, 'vainqueur' => trim((string) $req->post('vainqueur', '')) ?: null,
-            'detail_md' => $md ?: null, 'detail_html' => $md === '' ? null : Markdown::rendre($md), 'document_id' => (int) $req->post('document_id', 0) ?: null];
+            'detail_md' => $md ?: null, 'detail_html' => $md === '' ? null : Markdown::rendre($md), 'document_id' => $documentId];
     }
 
     // ----- golfs -----

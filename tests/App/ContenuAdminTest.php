@@ -6,6 +6,7 @@ use Agca\App\App;
 use Agca\App\Http\Request;
 use Agca\App\Repository\ActualiteRepository;
 use Agca\App\Repository\CompetitionRepository;
+use Agca\App\Repository\DocumentRepository;
 use Agca\App\Repository\GolfRepository;
 use Agca\App\Repository\PageRepository;
 use Agca\App\Repository\SerieRepository;
@@ -74,6 +75,13 @@ final class ContenuAdminTest extends DbTestCase
         self::assertSame("<ul>\n<li>1er Valgarde</li>\n</ul>", $pal['detail_html']);
         $this->req('POST', '/admin/contenu/palmares/' . $pal['id'], ['saison' => '2025', 'lieu' => 'Gap', 'vainqueur' => 'Valgarde et Orange', 'detail_md' => '']);
         self::assertSame('Valgarde et Orange', $c->palmaresParId((int) $pal['id'])['vainqueur']);
+        // document_id inexistant refusé (stocké null)
+        $this->req('POST', '/admin/contenu/palmares/' . $pal['id'], ['saison' => '2025', 'lieu' => 'Gap', 'vainqueur' => 'Valgarde et Orange', 'detail_md' => '', 'document_id' => '9999']);
+        self::assertNull($c->palmaresParId((int) $pal['id'])['document_id']);
+        // document_id existant accepté
+        $docId = $this->app->service(DocumentRepository::class)->creer(['titre' => 'Palmarès PDF', 'fichier' => '2026-09-04-test-aaaaaa.pdf', 'type_mime' => 'application/pdf', 'taille' => 10, 'categorie' => 'palmares', 'televerse_par' => null]);
+        $this->req('POST', '/admin/contenu/palmares/' . $pal['id'], ['saison' => '2025', 'lieu' => 'Gap', 'vainqueur' => 'Valgarde et Orange', 'detail_md' => '', 'document_id' => (string) $docId]);
+        self::assertSame($docId, (int) $c->palmaresParId((int) $pal['id'])['document_id']);
         $this->req('POST', '/admin/contenu/palmares/' . $pal['id'] . '/supprimer');
         self::assertSame([], $c->palmares($id));
 
