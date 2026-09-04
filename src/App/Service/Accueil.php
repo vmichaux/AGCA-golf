@@ -67,7 +67,7 @@ final class Accueil
         ];
     }
 
-    /** @return null|array{date:string, series:list<array{code:string, libelle:string, nb_rencontres:int, nb_divisions:int}>} */
+    /** @return null|array{date:string, series:list<array{code:string, libelle:string, nb_rencontres:int, nb_divisions:int, nb_journees:int}>} */
     private function prochaineJournee(int $saisonId, string $ymd): ?array
     {
         if ($saisonId === 0) { return null; }
@@ -83,6 +83,7 @@ final class Accueil
                 'journee_phase' => $l['journee_phase'] === null ? null : (string) $l['journee_phase'],
                 'nb_rencontres' => (int) $l['nb_rencontres'],
                 'nb_divisions' => (int) $l['nb_divisions'],
+                'nb_journees' => (int) $l['nb_journees'],
             ];
         }
         return ['date' => $date, 'series' => $series];

@@ -71,11 +71,15 @@ final class RencontreRepository extends Repository
         return $l === null || $l['date_reelle'] === null ? null : (string) $l['date_reelle'];
     }
 
-    /** Résumé par série des rencontres à jouer d'une date : nombre de rencontres et de divisions. */
+    /**
+     * Résumé par série des rencontres à jouer d'une date : nombre de rencontres, de divisions
+     * et de journées distinctes. `nb_journees > 1` (report d'une rencontre sur la date d'une
+     * autre journée) : le numéro et la phase ne caractérisent plus la date, ne pas les afficher.
+     */
     public function resumeParSerieALaDate(int $saisonId, string $ymd): array
     {
         return $this->db->all("SELECT se.code, se.libelle, MIN(j.numero) AS journee_numero, MIN(j.phase) AS journee_phase,
-            COUNT(*) AS nb_rencontres, COUNT(DISTINCT r.division_id) AS nb_divisions
+            COUNT(*) AS nb_rencontres, COUNT(DISTINCT r.division_id) AS nb_divisions, COUNT(DISTINCT r.journee_id) AS nb_journees
             FROM agca_rencontre r
             JOIN agca_division d ON d.id = r.division_id
             JOIN agca_serie se ON se.id = d.serie_id

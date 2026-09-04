@@ -90,7 +90,9 @@ foreach ($series as $s) { $libelleSerie[(string) $s['code']] = (string) $s['libe
   <?php foreach ($prochaine_journee['series'] as $sj): ?>
     <?php
     $detail = $sj['libelle'];
-    if ($sj['journee_numero'] !== null && $sj['journee_phase'] !== null) {
+    // Numéro de journée affiché seulement si la date ne porte qu'une journée pour la série
+    // (un report peut faire cohabiter deux journées le même jour).
+    if ($sj['nb_journees'] === 1 && $sj['journee_numero'] !== null && $sj['journee_phase'] !== null) {
         $detail .= ' — ' . $rang((int) $sj['journee_numero']) . ' journée ' . $sj['journee_phase'] . ',';
     } else {
         $detail .= ' —';
@@ -167,27 +169,25 @@ foreach ($series as $s) { $libelleSerie[(string) $s['code']] = (string) $s['libe
   </div>
 </div></section>
 
+<?php /* Aucun repli ici : les articles de la maquette sont des exemples, pas du contenu du site. */ ?>
+<?php if ($actualites !== []): ?>
 <section class="bloc"><div class="conteneur">
   <div class="titre-section"><div><span class="etiquette">Actualités</span><h2>La vie de l'association</h2></div><a class="lien-fleche" href="/actualites">Toutes les actualités</a></div>
   <div class="grille-3">
-    <?php if ($actualites !== []): ?>
-      <?php foreach ($actualites as $a): ?>
-      <?php $d = $jour((string) $a['date_publication']); ?>
-      <article class="actu">
-        <time datetime="<?= e(substr((string) $a['date_publication'], 0, 10)) ?>"><?= $d === null ? e($a['date_publication']) : e(mb_convert_case($moisLongs[(int) $d->format('n') - 1], MB_CASE_TITLE, 'UTF-8') . ' ' . $d->format('Y')) ?></time>
-        <h3><a href="/actualites/<?= e($a['id']) ?>-<?= e($a['slug']) ?>"><?= e($a['titre']) ?></a></h3>
-        <?php if (trim((string) $a['resume']) !== ''): ?><p><?= e($a['resume']) ?></p><?php endif; ?>
-      </article>
-      <?php endforeach; ?>
-    <?php else: ?>
-      <article class="actu"><time>Septembre 2026</time><h3>La saison 2026-27 démarre le 26 septembre</h3><p>Vingt-cinq équipes, dix-huit golfs, cinq poules en Mixte 2e série et une division en Homme 1re série. Le calendrier complet est en ligne.</p></article>
-      <article class="actu"><time>Trophée 2026</time><h3>Le Trophée de l'Amitié à Valgarde</h3><p>Château-l'Arc et Valgarde primés en net et en brut, un green fee offert à chaque lauréat. Résultats complets dans la rubrique Compétitions.</p></article>
-      <article class="actu"><time>Master 2025</time><h3>Valgarde et Orange sacrés au Master de Gap</h3><p>Temps excellent, parcours parfait et convivialité au rendez-vous pour la journée de clôture de la saison 2024-25.</p></article>
-    <?php endif; ?>
+    <?php foreach ($actualites as $a): ?>
+    <?php $d = $jour((string) $a['date_publication']); ?>
+    <article class="actu">
+      <time datetime="<?= e(substr((string) $a['date_publication'], 0, 10)) ?>"><?= $d === null ? e($a['date_publication']) : e(mb_convert_case($moisLongs[(int) $d->format('n') - 1], MB_CASE_TITLE, 'UTF-8') . ' ' . $d->format('Y')) ?></time>
+      <h3><a href="/actualites/<?= e($a['id']) ?>-<?= e($a['slug']) ?>"><?= e($a['titre']) ?></a></h3>
+      <?php if (trim((string) $a['resume']) !== ''): ?><p><?= e($a['resume']) ?></p><?php endif; ?>
+    </article>
+    <?php endforeach; ?>
   </div>
 </div></section>
+<?php endif; ?>
 
-<section class="bloc beige" id="golfs"><div class="conteneur">
+<?php /* Sans la section Actualités, les Golfs enchaînent sur un bloc beige : on garde l'alternance. */ ?>
+<section class="bloc<?= $actualites === [] ? '' : ' beige' ?>" id="golfs"><div class="conteneur">
   <div class="titre-section"><div><span class="etiquette">Golfs membres</span><h2>De Gap à Sainte-Maxime</h2></div><a class="lien-fleche" href="/golfs">Tous les golfs</a></div>
   <div class="grille-golfs">
     <?php if ($golfs !== []): ?>

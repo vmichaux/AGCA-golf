@@ -27,6 +27,7 @@ final class AccueilTest extends DbTestCase
     /** @var array<string, int> nom d'équipe => identifiant */
     private array $equipes = [];
     private string $gagnante = '';
+    private int $divisionM = 0;
 
     protected function setUp(): void
     {
@@ -71,12 +72,12 @@ final class AccueilTest extends DbTestCase
             }
             $div = $creation->ajouterDivision($this->saisonId, $serieId, $poule['libelle'], $positions, $this->admin);
             self::assertSame([], $div['erreurs']);
+            if ($code === 'M') { $this->divisionM = (int) $div['id']; }
         }
 
         // Feuille enregistrée sur la première rencontre jouée : l'invité l'emporte largement.
         $rencontres = $this->app->service(RencontreRepository::class);
-        $premiere = $rencontres->parDivision((int) $this->app->service(\Agca\App\Repository\DivisionRepository::class)
-            ->parSaisonEtSerie($this->saisonId, (int) $series->parCode('M')['id'])[0]['id'])[0];
+        $premiere = $rencontres->parDivision($this->divisionM)[0];
         $rencontres->mettreAJourResultat((int) $premiere['id'], ['statut' => 'enregistree', 'total_pour' => 8, 'total_contre' => 22,
             'pts_rencontre_pour' => 0, 'pts_rencontre_contre' => 2, 'bonus_invite' => 1]);
         $this->gagnante = (string) $premiere['invite_nom'];
@@ -125,6 +126,35 @@ final class AccueilTest extends DbTestCase
         self::assertSame('Mixte 2e série', $p['series'][0]['libelle']);
         self::assertSame(2, $p['series'][0]['nb_rencontres']);
         self::assertSame(1, $p['series'][0]['nb_divisions']);
+        self::assertSame(1, $p['series'][0]['nb_journees']);
+        self::assertSame(2, $p['series'][0]['journee_numero']);
+        self::assertSame('aller', $p['series'][0]['journee_phase']);
+        self::assertStringContainsString('Mixte 2e série — 2e journée aller, 2 rencontres dans 1 poule', $this->rendu());
+    }
+
+    /**
+     * Une rencontre reportée sur la date d'une autre journée : la date porte deux journées,
+     * le numéro ne la caractérise plus et le libellé doit rester neutre.
+     */
+    public function testProchaineJourneeSansNumeroQuandDeuxJourneesLeMemeJour(): void
+    {
+        $rencontres = $this->app->service(RencontreRepository::class);
+        $troisieme = null;
+        foreach ($rencontres->parDivision($this->divisionM) as $r) {
+            if ((int) $r['journee_numero'] === 3 && $r['journee_phase'] === 'aller') { $troisieme = $r; break; }
+        }
+        self::assertNotNull($troisieme);
+        $rencontres->mettreAJourDate((int) $troisieme['id'], '2026-09-26', true);
+
+        $p = $this->donnees()['prochaine_journee'];
+        self::assertSame('2026-09-26', $p['date']);
+        self::assertSame(2, $p['series'][0]['nb_journees']);
+        self::assertSame(3, $p['series'][0]['nb_rencontres']);
+
+        $html = $this->rendu();
+        self::assertStringContainsString('Mixte 2e série — 3 rencontres dans 1 poule', $html);
+        self::assertStringNotContainsString('journée aller', $html);
+        self::assertStringNotContainsString('journée retour', $html);
     }
 
     public function testClassementsParSerie(): void
@@ -172,11 +202,48 @@ final class AccueilTest extends DbTestCase
         self::assertArrayHasKey('format-interclubs', $d['pages']);
     }
 
-    public function testPageAccueil(): void
+    /**
+     * Rend le gabarit avec les données de la date de test : `GET /` utilise la date du jour,
+     * ce qui rendrait toute assertion sur le bandeau « Prochaine journée » dépendante du calendrier.
+     */
+    private function rendu(): string
+    {
+        $v = $this->app->view();
+        $v->partager('utilisateur', null);
+        $v->partager('flashs', []);
+        $v->partager('csrf', 'test');
+        $v->partager('menuPages', []);
+        return $v->rendre('site/accueil', $this->donnees() + ['titre' => 'AGCA', 'description' => '', 'accroche_repli' => 'Accroche.']);
+    }
+
+    private function html(): string
     {
         $rep = $this->app->executer(new Request('GET', '/', [], [], '127.0.0.1'));
         self::assertSame(200, $rep->statut);
-        $html = $rep->corps;
+        return $rep->corps;
+    }
+
+    /** Sans actualité publiée, la section n'est pas rendue : les articles de la maquette sont des exemples. */
+    public function testSectionActualitesAbsenteSansActualitePubliee(): void
+    {
+        $actus = $this->app->service(ActualiteRepository::class);
+        foreach ($actus->toutes() as $a) { $actus->modifier((int) $a['id'], ['publie' => 0]); }
+        self::assertSame([], $this->donnees()['actualites']);
+
+        $html = $this->html();
+        self::assertStringNotContainsString('La vie de l\'association', $html);
+        self::assertStringNotContainsString('Toutes les actualités', $html);
+        self::assertStringNotContainsString('Le Master 2025 à Gap', $html);
+        self::assertStringNotContainsString('La saison 2026-27 démarre le 26 septembre', $html);
+        // les autres replis restent en place
+        self::assertStringContainsString('Découvrir de nouveaux parcours', $html);
+        self::assertStringContainsString('Cinq rendez-vous dans la saison', $html);
+        self::assertStringContainsString('De Gap à Sainte-Maxime', $html);
+    }
+
+    public function testPageAccueil(): void
+    {
+        $html = $this->html();
         self::assertStringContainsString('Association des Golfs de la Coupe de l\'Amitié', $html);
         self::assertStringContainsString('DIV2/POULE B', $html);
         self::assertStringContainsString(self::CITATION, $html);
