@@ -5,3 +5,5 @@ config/config.php
 .phpunit.result.cache
 .claude/launch.json
 public/maquette/
+public/documents/*
+!public/documents/.gitkeep
