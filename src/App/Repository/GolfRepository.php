@@ -15,4 +15,14 @@ final class GolfRepository extends Repository
         if ($g !== null) { return (int) $g['id']; }
         return $this->db->insert('INSERT INTO agca_golf (nom, ville) VALUES (?, ?)', [mb_strtoupper($nom), $ville]);
     }
+
+    public function membres(): array { return $this->db->all('SELECT * FROM agca_golf WHERE membre = 1 ORDER BY ordre, nom'); }
+
+    public function modifier(int $id, array $champs): void
+    {
+        $champs = array_intersect_key($champs, array_flip(['nom', 'ville', 'site_web', 'membre', 'ordre']));
+        if ($champs === []) { return; }
+        [$set, $p] = $this->set($champs);
+        $this->db->exec("UPDATE agca_golf SET $set WHERE id = :id", $p + ['id' => $id]);
+    }
 }
