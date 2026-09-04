@@ -9,13 +9,14 @@ use Agca\App\Controller\CapitaineController;
 use Agca\App\Controller\FeuilleController;
 use Agca\App\Controller\PublicController;
 use Agca\App\Controller\SaisonController;
+use Agca\App\Controller\SiteController;
 use Agca\App\Http\Router;
 
 final class Routes
 {
     public static function declarer(Router $r): void
     {
-        $r->get('/', [PublicController::class, 'accueil']);
+        $r->get('/', [SiteController::class, 'accueil']);
 
         $r->get('/connexion', [AuthController::class, 'formulaireConnexion']);
         $r->post('/connexion', [AuthController::class, 'connexion']);

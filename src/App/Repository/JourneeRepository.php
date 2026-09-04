@@ -15,4 +15,10 @@ final class JourneeRepository extends Repository
     }
 
     public function parId(int $id): ?array { return $this->db->one('SELECT * FROM agca_journee WHERE id = ?', [$id]); }
+
+    /** Dates distinctes du calendrier d'une saison, toutes séries confondues. @return list<string> */
+    public function datesDistinctes(int $saisonId): array
+    {
+        return array_map('strval', array_column($this->db->all('SELECT DISTINCT date_calendrier FROM agca_journee WHERE saison_id = ? ORDER BY date_calendrier', [$saisonId]), 'date_calendrier'));
+    }
 }

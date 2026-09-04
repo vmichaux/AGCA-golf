@@ -52,7 +52,7 @@ final class PublicPagesTest extends DbTestCase
         self::assertStringContainsString('DIV2/POULE B', $html);
         self::assertStringContainsString('LUBERON-1', $html);
         // LUBERON-1 : 3 + 1 bonus = 4 points, en tête
-        self::assertMatchesRegularExpression('/<td class="num">1<\/td>\s*<td>LUBERON-1<\/td>\s*<td class="num">4<\/td>/', $html);
+        self::assertMatchesRegularExpression('/<td class="rang">1<\/td>\s*<td>LUBERON-1<\/td>\s*<td class="num"><b>4<\/b><\/td>/', $html);
         self::assertStringContainsString('2026-27', $html);
     }
 
@@ -69,7 +69,10 @@ final class PublicPagesTest extends DbTestCase
     {
         self::assertStringContainsString('DOUBLE', $this->get('/serie/M/feuille-vierge'));
         self::assertStringContainsString('Homme 1re série', $this->get('/serie/H1/reglement'));
-        self::assertStringContainsString('Homme 1re série', $this->get('/'));
+        $accueil = $this->get('/');
+        self::assertStringContainsString('Homme 1re série', $accueil);
+        self::assertStringContainsString('class="entete"', $accueil);
+        self::assertStringContainsString('href="/competitions"', $accueil);
     }
 
     public function testSerieInconnue404(): void

@@ -4,29 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= e($titre ?? 'AGCA') ?></title>
+<?php if (!empty($description)): ?>
+<meta name="description" content="<?= e($description) ?>">
+<?php endif; ?>
+<link rel="icon" href="/img/logo-agca.jpg">
 <link rel="stylesheet" href="/css/agca.css">
 </head>
 <body>
-<header class="entete">
-  <a class="marque" href="/">AGCA <span>Interclubs</span></a>
-  <nav class="nav">
-    <a href="/serie/M/classements">Mixte 2e série</a>
-    <a href="/serie/H1/classements">Homme 1re série</a>
-    <?php if (!empty($utilisateur)): ?>
-      <a href="/capitaine"><?= e($utilisateur['identifiant']) ?></a>
-      <?php if ($utilisateur['est_admin']): ?><a href="/admin">Admin</a><?php endif; ?>
-      <form method="post" action="/deconnexion" class="inline"><input type="hidden" name="_csrf" value="<?= e($csrf ?? '') ?>"><button class="lien">Déconnexion</button></form>
-    <?php else: ?>
-      <a href="/connexion">Espace capitaine</a>
-    <?php endif; ?>
-  </nav>
-</header>
-<main class="contenu">
-  <?php foreach ($flashs ?? [] as $f): ?>
-    <div class="flash flash-<?= e($f['type']) ?>"><?= e($f['message']) ?></div>
-  <?php endforeach; ?>
-  <?= $contenu ?>
+<a class="evitement" href="#contenu">Aller au contenu</a>
+<?= $vue->inclure('partials/entete') ?>
+<main id="contenu">
+<?php if (!empty($flashs)): ?>
+  <div class="conteneur zone-flash">
+    <?php foreach ($flashs as $f): ?><div class="flash flash-<?= e($f['type']) ?>"><?= e($f['message']) ?></div><?php endforeach; ?>
+  </div>
+<?php endif; ?>
+<?= $contenu ?>
 </main>
-<footer class="pied">AGCA — Association des Golfs de la Coupe de l'Amitié · <a href="/">Accueil</a></footer>
+<?= $vue->inclure('partials/pied') ?>
+<script src="/js/site.js" defer></script>
 </body>
 </html>
