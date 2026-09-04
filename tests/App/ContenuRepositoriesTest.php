@@ -75,8 +75,9 @@ final class ContenuRepositoriesTest extends DbTestCase
         self::assertSame('Orange 2', $r->palmaresParId($p1)['vainqueur']);
         $r->supprimerPalmares($p2);
         self::assertCount(1, $r->palmares($m));
-        $r->modifier($t, ['actif' => 1, 'nom' => 'Le Tournoi de l\'Amitié']);
+        $r->modifier($t, ['actif' => 1, 'nom' => 'Le Tournoi de l\'Amitié', 'code' => 'autre']);
         self::assertSame('Le Tournoi de l\'Amitié', $r->parCode('tournoi')['nom']);
+        self::assertSame('tournoi', $r->parId($t)['code']);
     }
 
     public function testGolfsOrganigrammeAlbums(): void

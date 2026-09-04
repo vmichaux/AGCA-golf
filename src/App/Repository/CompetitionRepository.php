@@ -5,6 +5,7 @@ namespace Agca\App\Repository;
 final class CompetitionRepository extends Repository
 {
     private const CHAMPS = ['code', 'nom', 'accroche', 'formule', 'corps_md', 'corps_html', 'ordre', 'actif'];
+    private const CHAMPS_MODIFIER = ['nom', 'accroche', 'formule', 'corps_md', 'corps_html', 'ordre', 'actif'];
     private const CHAMPS_PALMARES = ['competition_id', 'saison', 'lieu', 'vainqueur', 'detail_md', 'detail_html', 'document_id', 'ordre'];
     private const SELECT_PALMARES = 'SELECT p.*, d.titre AS document_titre, d.fichier AS document_fichier FROM agca_palmares p LEFT JOIN agca_document d ON d.id = p.document_id';
 
@@ -23,7 +24,7 @@ final class CompetitionRepository extends Repository
 
     public function modifier(int $id, array $champs): void
     {
-        $champs = array_intersect_key($champs, array_flip(self::CHAMPS));
+        $champs = array_intersect_key($champs, array_flip(self::CHAMPS_MODIFIER));
         if ($champs === []) { return; }
         [$set, $p] = $this->set($champs);
         $this->db->exec("UPDATE agca_competition SET $set WHERE id = :id", $p + ['id' => $id]);
