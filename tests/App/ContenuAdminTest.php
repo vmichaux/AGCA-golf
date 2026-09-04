@@ -110,6 +110,14 @@ final class ContenuAdminTest extends DbTestCase
         self::assertSame(200, $this->req('GET', '/admin/contenu/documents')->statut);
     }
 
+    /** Formulaire admin sans jeton CSRF : refusé (400), la page n'est pas créée. */
+    public function testEnregistrerPageSansJetonCsrf(): void
+    {
+        $rep = $this->app->executer(new Request('POST', '/admin/contenu/pages', [], ['slug' => 'sans-jeton', 'titre' => 'Sans jeton', 'corps_md' => ''], '127.0.0.1'));
+        self::assertSame(400, $rep->statut);
+        self::assertNull($this->app->service(PageRepository::class)->parSlug('sans-jeton'));
+    }
+
     public function testAccesRefuseSansAdmin(): void
     {
         $m = $this->app->service(SerieRepository::class)->parCode('M')['id'];

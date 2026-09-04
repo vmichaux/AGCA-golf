@@ -141,6 +141,16 @@ final class SitePagesTest extends DbTestCase
         self::assertStringNotContainsString('ANCIEN', $html);
     }
 
+    /** Un site_web malveillant (`javascript:`) n'est jamais rendu en lien : la validation d'URL golfs.php le rejette. */
+    public function testGolfAvecSiteWebInvalideNonRenduEnLien(): void
+    {
+        $golfs = $this->app->service(GolfRepository::class);
+        $golfs->modifier($golfs->trouverOuCreer('MALVEILLANT', 'Nulle part'), ['site_web' => 'javascript:alert(1)']);
+        $html = $this->get('/golfs');
+        self::assertStringContainsString('MALVEILLANT', $html);
+        self::assertStringNotContainsString('javascript:', $html);
+    }
+
     public function testAlbumsPhoto(): void
     {
         $html = $this->get('/photos');
