@@ -26,7 +26,7 @@
     <?php foreach (['G' => 'Gagné', 'N' => 'Nul', 'P' => 'Perdu'] as $code => $lib): ?>
       <label class="radio"><input type="radio" name="p[<?= $n ?>][resultat]" value="<?= $code ?>" <?= ($v['resultat'] ?? '') === $code ? 'checked' : '' ?>> <?= $lib ?></label>
     <?php endforeach; ?>
-    <input name="p[<?= $n ?>][score]" value="<?= e($v['score'] ?? '') ?>" placeholder="Score (3&2, 1UP, AS)" class="score" style="max-width:11rem">
+    <input name="p[<?= $n ?>][score]" value="<?= e($v['score'] ?? '') ?>" placeholder="Score (3&2, 1UP, AS)" class="score champ-score">
     <span class="pts-partie aide"></span>
   </div>
 </fieldset>

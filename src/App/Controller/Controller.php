@@ -6,6 +6,7 @@ use Agca\App\App;
 use Agca\App\Http\HttpException;
 use Agca\App\Http\Request;
 use Agca\App\Http\Response;
+use Agca\App\Repository\PageRepository;
 
 abstract class Controller
 {
@@ -19,6 +20,7 @@ abstract class Controller
         $v->partager('flashs', $this->app->session()->consommerFlashs());
         $v->partager('csrf', $this->app->session()->csrf());
         $v->partager('base_url', (string) $this->app->config('app.base_url', ''));
+        $v->partager('menuPages', $this->app->service(PageRepository::class)->menu());
         return Response::html($v->rendre($template, $vars), $statut);
     }
 
