@@ -138,36 +138,31 @@ foreach ($series as $s) { $libelleSerie[(string) $s['code']] = (string) $s['libe
   </div>
 </div></section>
 
+<?php /* Aucun repli codé en dur : comme les actualités, la section n'est rendue que si des compétitions existent. */ ?>
+<?php if ($competitions !== []): ?>
 <section class="bloc beige" id="competitions"><div class="conteneur">
   <div class="titre-section"><div><span class="etiquette">Nos compétitions</span><h2>Cinq rendez-vous dans la saison</h2></div><a class="lien-fleche" href="/competitions">Résultats et palmarès</a></div>
   <div class="grille-5">
-    <?php if ($competitions !== []): ?>
-      <?php foreach ($competitions as $c): ?>
-      <div class="carte-comp">
-        <?php if (trim((string) $c['accroche']) !== ''): ?><span class="etiquette"><?= e($c['accroche']) ?></span><?php endif; ?>
-        <h3><a href="/competitions/<?= e($c['code']) ?>"><?= e($c['nom']) ?></a></h3>
-        <p class="formule"><?= e($c['formule']) ?></p>
-        <?php $p = $c['dernier_palmares']; ?>
-        <?php if ($p !== null): ?>
-          <?php
-          $aVainqueur = trim((string) $p['vainqueur']) !== '';
-          $etiquettePal = $aVainqueur ? 'Vainqueur ' . $p['saison'] : 'Dernière édition';
-          $valeurPal = $aVainqueur ? (string) $p['vainqueur'] : (string) $p['saison'];
-          if (trim((string) $p['lieu']) !== '') { $valeurPal .= ' à ' . $p['lieu']; }
-          ?>
-        <p class="vainqueur"><?= e($etiquettePal) ?><b><?= e($valeurPal) ?></b></p>
-        <?php endif; ?>
-      </div>
-      <?php endforeach; ?>
-    <?php else: ?>
-      <div class="carte-comp"><span class="etiquette">Ouverture de saison</span><h3>Le Challenge</h3><p class="formule">Par équipes de club, classements « Challenge » et « 4 cartes ».</p><p class="vainqueur">Dernière édition<b>2019 à Châteaublanc</b></p></div>
-      <div class="carte-comp"><span class="etiquette">Individuel</span><h3>Le Tournoi de l'Amitié</h3><p class="formule">Classement par équipe en net et classements individuels.</p><p class="vainqueur">Vainqueur 2025<b>Valcros, 146 points</b></p></div>
-      <div class="carte-comp"><span class="etiquette">Par paires</span><h3>Le Trophée</h3><p class="formule">Stableford net et brut, messieurs et mixte.</p><p class="vainqueur">Édition 2026<b>Valgarde · Château-l'Arc et Valgarde primés</b></p></div>
-      <div class="carte-comp"><span class="etiquette">Clôture de saison</span><h3>Le Master</h3><p class="formule">Réservé aux équipes premières de chaque division.</p><p class="vainqueur">Vainqueurs 2025 à Gap<b>Valgarde (1re série) · Orange (2e série)</b></p></div>
-      <div class="carte-comp"><span class="etiquette">Entre capitaines</span><h3>La Coupe des Capitaines</h3><p class="formule">Une journée conviviale suivie de la réunion des capitaines.</p><p class="vainqueur">Première édition<b>2022 à Calas</b></p></div>
-    <?php endif; ?>
+    <?php foreach ($competitions as $c): ?>
+    <div class="carte-comp">
+      <?php if (trim((string) $c['accroche']) !== ''): ?><span class="etiquette"><?= e($c['accroche']) ?></span><?php endif; ?>
+      <h3><a href="/competitions/<?= e($c['code']) ?>"><?= e($c['nom']) ?></a></h3>
+      <p class="formule"><?= e($c['formule']) ?></p>
+      <?php $p = $c['dernier_palmares']; ?>
+      <?php if ($p !== null): ?>
+        <?php
+        $aVainqueur = trim((string) $p['vainqueur']) !== '';
+        $etiquettePal = $aVainqueur ? 'Vainqueur ' . $p['saison'] : 'Dernière édition';
+        $valeurPal = $aVainqueur ? (string) $p['vainqueur'] : (string) $p['saison'];
+        if (trim((string) $p['lieu']) !== '') { $valeurPal .= ' à ' . $p['lieu']; }
+        ?>
+      <p class="vainqueur"><?= e($etiquettePal) ?><b><?= e($valeurPal) ?></b></p>
+      <?php endif; ?>
+    </div>
+    <?php endforeach; ?>
   </div>
 </div></section>
+<?php endif; ?>
 
 <?php /* Aucun repli ici : les articles de la maquette sont des exemples, pas du contenu du site. */ ?>
 <?php if ($actualites !== []): ?>
@@ -186,18 +181,15 @@ foreach ($series as $s) { $libelleSerie[(string) $s['code']] = (string) $s['libe
 </div></section>
 <?php endif; ?>
 
-<?php /* Sans la section Actualités, les Golfs enchaînent sur un bloc beige : on garde l'alternance. */ ?>
+<?php /* Aucun repli codé en dur : comme les actualités, la section n'est rendue que si des golfs membres existent.
+     Sans la section Actualités, les Golfs enchaînent sur un bloc beige : on garde l'alternance. */ ?>
+<?php if ($golfs !== []): ?>
 <section class="bloc<?= $actualites === [] ? '' : ' beige' ?>" id="golfs"><div class="conteneur">
   <div class="titre-section"><div><span class="etiquette">Golfs membres</span><h2>De Gap à Sainte-Maxime</h2></div><a class="lien-fleche" href="/golfs">Tous les golfs</a></div>
   <div class="grille-golfs">
-    <?php if ($golfs !== []): ?>
-      <?php foreach ($golfs as $g): ?>
-      <div class="golf"><b><?= e($g['nom']) ?></b><span><?= e($g['ville']) ?></span></div>
-      <?php endforeach; ?>
-    <?php else: ?>
-      <?php foreach ([['Aix-en-Provence', 'Aix-en-Provence'], ['Barbaroux', 'Brignoles'], ['Château-l\'Arc', 'Fuveau'], ['Châteaublanc', 'Avignon'], ['Digne', 'Digne-les-Bains'], ['Estérel', 'Saint-Raphaël'], ['Frégate', 'Saint-Cyr-sur-Mer'], ['Gap', 'Gap-Bayard'], ['Grande Bastide', 'Châteauneuf-Grasse'], ['Luberon', 'Pierrevert'], ['Orange', 'Orange'], ['Roquebrune', 'Roquebrune-sur-Argens'], ['Saint-Martin', 'Saint-Martin-de-Crau'], ['Sainte-Maxime', 'Sainte-Maxime'], ['Salon', 'Salon-de-Provence'], ['Valcros', 'La Londe-les-Maures'], ['Valgarde', 'La Crau'], ['Victoria', 'Cannes']] as [$nom, $ville]): ?>
-      <div class="golf"><b><?= e($nom) ?></b><span><?= e($ville) ?></span></div>
-      <?php endforeach; ?>
-    <?php endif; ?>
+    <?php foreach ($golfs as $g): ?>
+    <div class="golf"><b><?= e($g['nom']) ?></b><span><?= e($g['ville']) ?></span></div>
+    <?php endforeach; ?>
   </div>
 </div></section>
+<?php endif; ?>

@@ -62,6 +62,7 @@ textarea{max-width:none;min-height:16rem;font-family:ui-monospace,SFMono-Regular
 .bandeau h1{font-size:clamp(2.1rem,4.6vw,3.6rem);font-weight:800;max-width:14ch;letter-spacing:-.03em}
 .bandeau p{max-width:56ch;font-size:1.08rem;opacity:.95;margin:1.2rem 0 1.6rem}
 .bandeau .etiquette{color:var(--ocre)}
+.bandeau a,.encart a{color:var(--ocre);font-weight:700}
 .chiffres{display:flex;flex-wrap:wrap;gap:2.5rem;margin-top:2.6rem;padding-top:1.6rem;border-top:1px solid rgba(255,255,255,.25)}
 .chiffres b{display:block;font-family:var(--titre);font-size:2.3rem;font-weight:800;color:var(--ocre);line-height:1;letter-spacing:-.03em}
 .chiffres span{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;opacity:.85}
@@ -136,7 +137,7 @@ td.rang{font-family:var(--titre);color:var(--ocre-fonce);font-size:1rem;font-wei
 .encart .points li,.encart ul li{padding:.55rem 0 .55rem 1.4rem;position:relative;border-bottom:1px solid rgba(255,255,255,.15);font-size:.98rem;line-height:1.5}
 .encart .points li::before,.encart ul li::before{content:"";position:absolute;left:0;top:1.05rem;width:8px;height:8px;border-radius:50%;background:var(--ocre)}
 .encart .points li:last-child,.encart ul li:last-child{border-bottom:0}
-.encart .invitation,.encart>p:last-child{margin:0;font-size:.95rem;opacity:.95}.encart .invitation a{color:var(--ocre);font-weight:700}
+.encart .invitation,.encart>p:last-child{margin:0;font-size:.95rem;opacity:.95}
 .grille-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
 .format{background:#fff;border:1px solid var(--bord);border-radius:8px;padding:1.4rem 1.3rem}
 .format .numero{display:block;font-family:var(--titre);font-weight:800;color:var(--ocre-fonce);font-size:.85rem;letter-spacing:.12em;margin-bottom:.8rem}
@@ -212,7 +213,7 @@ legend{font-family:var(--titre);font-weight:800;color:var(--vert-profond);paddin
 .totaux-direct strong{font-family:var(--titre);font-weight:800;color:var(--vert-profond)}
 /* pages publiques : champ piège du formulaire de contact, liens des cartes */
 .piege{position:absolute;left:-9999px}
-.golf span{display:block}.golf a{overflow-wrap:anywhere}
+.golf span{display:block}.golf a{overflow-wrap:anywhere}.golf b{overflow-wrap:anywhere}
 .cartes span{color:var(--gris);font-size:.85rem}
 /* atelier de contenu (chantier Contenu) */
 .editeur{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start}
@@ -254,6 +255,7 @@ legend{font-family:var(--titre);font-weight:800;color:var(--vert-profond);paddin
   .camps{grid-template-columns:1fr}
   .cartes{grid-template-columns:1fr}
 }
+@media (max-width:400px){.grille-golfs{grid-template-columns:1fr}}
 @media print{
   .entete,.pied,.no-print,.sous-nav,.flash,.zone-flash,.evitement{display:none}
   body{background:#fff;font-size:12px}

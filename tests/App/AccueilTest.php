@@ -241,6 +241,36 @@ final class AccueilTest extends DbTestCase
         self::assertStringContainsString('De Gap à Sainte-Maxime', $html);
     }
 
+    /** Sans compétition active, la section n'est pas rendue : aucun repli codé en dur. */
+    public function testSectionCompetitionsAbsenteSansCompetition(): void
+    {
+        $comp = $this->app->service(CompetitionRepository::class);
+        foreach ($comp->toutes(false) as $c) { $comp->modifier((int) $c['id'], ['actif' => 0]); }
+        self::assertSame([], $this->donnees()['competitions']);
+
+        $html = $this->html();
+        self::assertStringNotContainsString('Cinq rendez-vous dans la saison', $html);
+        self::assertStringNotContainsString('id="competitions"', $html);
+        // les autres replis restent en place
+        self::assertStringContainsString('Découvrir de nouveaux parcours', $html);
+        self::assertStringContainsString('De Gap à Sainte-Maxime', $html);
+    }
+
+    /** Sans golf membre, la section n'est pas rendue : aucun repli codé en dur. */
+    public function testSectionGolfsAbsenteSansGolfMembre(): void
+    {
+        $golfs = $this->app->service(GolfRepository::class);
+        foreach ($golfs->tous() as $g) { $golfs->modifier((int) $g['id'], ['membre' => 0]); }
+        self::assertSame([], $this->donnees()['golfs']);
+
+        $html = $this->html();
+        self::assertStringNotContainsString('De Gap à Sainte-Maxime', $html);
+        self::assertStringNotContainsString('grille-golfs', $html);
+        // les autres replis restent en place
+        self::assertStringContainsString('Découvrir de nouveaux parcours', $html);
+        self::assertStringContainsString('Cinq rendez-vous dans la saison', $html);
+    }
+
     public function testPageAccueil(): void
     {
         $html = $this->html();
