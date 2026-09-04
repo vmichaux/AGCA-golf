@@ -7,3 +7,4 @@ config/config.php
 public/maquette/
 public/documents/*
 !public/documents/.gitkeep
+.agca-test-db
