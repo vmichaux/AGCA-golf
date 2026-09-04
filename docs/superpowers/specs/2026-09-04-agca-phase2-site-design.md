@@ -51,7 +51,7 @@ Sections, de haut en bas :
 | `/association/organigramme` | Bureau directeur puis conseil d'administration : fonction, prénom, nom, golf |
 | `/association/statuts`, `/association/assemblees-generales`, `/association/voyage` | Page de texte + documents joints (PDF/DOC) |
 | `/mentions-legales` | Page de texte |
-| `/contact` | Formulaire : nom, e-mail, objet, message → e-mail à l'admin (`mail.admin`), copie du message au demandeur ; jeton CSRF, champ piège anti-robot, une soumission par minute et par session ; journalisé |
+| `/contact` | Formulaire : nom, e-mail, objet, message → e-mail à l'admin (`mail.admin`) uniquement (pas de copie au demandeur, pour ne pas servir de relais de courrier) ; jeton CSRF, champ piège anti-robot, limitation par adresse IP (1 par minute, 5 par jour) et plafond global (40 par jour) enregistrés dans `agca_contact_limite` ; journalisé sans le corps du message |
 | `/page/{slug}` | Toute page de texte supplémentaire créée par l'admin |
 Les pages championnat de la phase 1 gardent leurs routes et reçoivent le nouveau gabarit.
 
