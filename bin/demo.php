@@ -6,14 +6,19 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Agca\App\App;
 use Agca\App\Config;
+use Agca\App\Controller\ContenuController;
+use Agca\App\Repository\ActualiteRepository;
 use Agca\App\Repository\EquipeRepository;
 use Agca\App\Repository\GolfRepository;
+use Agca\App\Repository\OrganigrammeRepository;
 use Agca\App\Repository\RencontreRepository;
 use Agca\App\Repository\SaisonRepository;
 use Agca\App\Repository\SerieRepository;
 use Agca\App\Repository\UtilisateurRepository;
 use Agca\App\Service\CreationSaison;
+use Agca\App\Service\ContenuInitial;
 use Agca\App\Service\EnregistrementFeuille;
+use Agca\Domain\Markdown;
 use Agca\Domain\MotDePasse;
 
 $app = new App(Config::charger($argv[1] ?? null));
@@ -46,4 +51,32 @@ foreach (range(1, 15) as $n) {
         'inv1_nom' => "Fregate$n", 'inv1_index' => 13 + $n % 8, 'inv1_sexe' => 'H', 'inv2_nom' => "Fregatebis$n", 'inv2_index' => 16, 'inv2_sexe' => 'D', 'resultat' => $res[$n - 1], 'score' => $res[$n - 1] === 'N' ? 'AS' : '2&1'];
 }
 $app->service(EnregistrementFeuille::class)->enregistrer((int) $r['id'], $post, $users->parIdentifiantEtSerie('SALON', (int) $series->parCode('M')['id']));
+
+// Contenu du site : pages, compétitions, golfs et albums repris de l'ancien site.
+$app->service(ContenuInitial::class)->executer(null);
+
+// Actualités de démonstration.
+$actualites = $app->service(ActualiteRepository::class);
+$actus = [
+    [
+        'titre' => 'La saison DEMO démarre',
+        'resume' => 'Le calendrier de la saison DEMO est en ligne.',
+        'corps_md' => "La saison DEMO de l'AGCA débute avec deux séries et quatre équipes engagées.",
+        'date_publication' => date('Y-m-d', strtotime('-10 days')),
+    ],
+    [
+        'titre' => 'Résultats du Trophée',
+        'resume' => "Château-l'Arc et Valgarde primés au Trophée 2026.",
+        'corps_md' => "Le Trophée 2026, disputé à Valgarde, a été remporté par Château-l'Arc et Valgarde, vainqueurs en net et en brut ; un green fee gratuit a été offert à chaque lauréat.",
+        'date_publication' => date('Y-m-d', strtotime('-5 days')),
+    ],
+];
+foreach ($actus as $a) {
+    $actualites->creer(['titre' => $a['titre'], 'slug' => ContenuController::slug($a['titre']), 'date_publication' => $a['date_publication'],
+        'resume' => $a['resume'], 'corps_md' => $a['corps_md'], 'corps_html' => Markdown::rendre($a['corps_md']), 'publie' => 1, 'modifie_par' => $adminId]);
+}
+
+// Organigramme : donnée reprise de l'ancien site (document Master 2025 signé par le président).
+$app->service(OrganigrammeRepository::class)->creer(['groupe' => 'bureau', 'fonction' => 'Président', 'prenom' => 'Guy', 'nom' => 'POMET', 'golf' => 'Valgarde', 'ordre' => 0]);
+
 echo "Démo prête : ADMIN/admin1234, capitaines (SALON, FREGATE, ORANGE, DIGNE en M ; VALGARDE-1, SALON, ORANGE, VICTORIA en H1) / demo1234.\n";
