@@ -22,5 +22,6 @@ return [
         'secret'   => 'changer-cette-chaine-aleatoire',
         'debug'    => false, // passer à true en local
         'https'    => true,  // false uniquement en local http
+        'documents_dir' => __DIR__ . '/../public/documents', // dossier des documents téléversés (à sauvegarder)
     ],
 ];
