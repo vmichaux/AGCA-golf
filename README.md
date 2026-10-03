@@ -3,6 +3,7 @@
 Application PHP 8 / MySQL 8 des championnats interclubs AGCA (Mixte 2e série, Homme 1re série).
 
 ## Installation locale
+En une commande sur macOS : `sh bin/installer-local.sh` (voir `docs/installation-locale.md`). À la main :
 1. `brew install php composer mysql && brew services start mysql`
 2. `composer install`
 3. `cp config/config.php.dist config/config.php` puis renseigner la base.
